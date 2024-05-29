@@ -76,55 +76,69 @@ class MartyControlApp(QWidget):
         self.status_label = QLabel('', self)
         self.layout.addWidget(self.status_label)
 
+        # Initialisation des autres boutons désactivés
         self.move_btn = QPushButton('Bouger articulation (left_hip à 20 degrés)', self)
+        self.move_btn.setEnabled(False)
         self.move_btn.clicked.connect(self.move_joint)
         self.layout.addWidget(self.move_btn)
 
         self.walk_btn = QPushButton('Marcher 5 pas', self)
+        self.walk_btn.setEnabled(False)
         self.walk_btn.clicked.connect(self.walk)
         self.layout.addWidget(self.walk_btn)
 
         self.turn_btn = QPushButton('Tourner de 90 degrés', self)
+        self.turn_btn.setEnabled(False)
         self.turn_btn.clicked.connect(self.turn)
         self.layout.addWidget(self.turn_btn)
 
         self.dance_btn = QPushButton('Danse en cercle', self)
+        self.dance_btn.setEnabled(False)
         self.dance_btn.clicked.connect(self.dance_circle)
         self.layout.addWidget(self.dance_btn)
 
         self.stand_btn = QPushButton('Se tenir droit', self)
+        self.stand_btn.setEnabled(False)
         self.stand_btn.clicked.connect(self.stand_straight)
         self.layout.addWidget(self.stand_btn)
 
         self.lean_btn = QPushButton('Incliner à gauche', self)
+        self.lean_btn.setEnabled(False)
         self.lean_btn.clicked.connect(self.lean_left)
         self.layout.addWidget(self.lean_btn)
 
         self.eye_btn = QPushButton('Bouger œil gauche à 45 degrés', self)
+        self.eye_btn.setEnabled(False)
         self.eye_btn.clicked.connect(self.move_eye)
         self.layout.addWidget(self.eye_btn)
 
         self.led_btn = QPushButton('Définir LED gauche à rouge', self)
+        self.led_btn.setEnabled(False)
         self.led_btn.clicked.connect(self.set_led)
         self.layout.addWidget(self.led_btn)
 
         self.sound_btn = QPushButton('Jouer son ID 1', self)
+        self.sound_btn.setEnabled(False)
         self.sound_btn.clicked.connect(self.play_sound)
         self.layout.addWidget(self.sound_btn)
 
         self.distance_btn = QPushButton('Obtenir distance', self)
+        self.distance_btn.setEnabled(False)
         self.distance_btn.clicked.connect(self.get_distance)
         self.layout.addWidget(self.distance_btn)
 
         self.accelerometer_btn = QPushButton('Obtenir accéléromètre', self)
+        self.accelerometer_btn.setEnabled(False)
         self.accelerometer_btn.clicked.connect(self.get_accelerometer)
         self.layout.addWidget(self.accelerometer_btn)
 
         self.stop_btn = QPushButton('Arrêter', self)
+        self.stop_btn.setEnabled(False)
         self.stop_btn.clicked.connect(self.stop)
         self.layout.addWidget(self.stop_btn)
 
         self.high_five_btn = QPushButton('High Five', self)
+        self.high_five_btn.setEnabled(False)
         self.high_five_btn.clicked.connect(self.high_five)
         self.layout.addWidget(self.high_five_btn)
 
@@ -133,6 +147,22 @@ class MartyControlApp(QWidget):
         try:
             self.marty_robot = MartyRobot(ip)
             self.status_label.setText(f'Connecté à Marty à {ip}')
+            # Activer tous les autres boutons après la connexion réussie
+            self.move_btn.setEnabled(True)
+            self.walk_btn.setEnabled(True)
+            self.turn_btn.setEnabled(True)
+            self.dance_btn.setEnabled(True)
+            self.stand_btn.setEnabled(True)
+            self.lean_btn.setEnabled(True)
+            self.eye_btn.setEnabled(True)
+            self.led_btn.setEnabled(True)
+            self.sound_btn.setEnabled(True)
+            self.distance_btn.setEnabled(True)
+            self.accelerometer_btn.setEnabled(True)
+            self.stop_btn.setEnabled(True)
+            self.high_five_btn.setEnabled(True)
+            # Désactiver le bouton de connexion après la connexion réussie
+            self.connect_btn.setEnabled(False)
         except MartyConfigException as e:
             self.status_label.setText(f'Erreur: {e}')
 
@@ -161,24 +191,4 @@ class MartyControlApp(QWidget):
         self.marty_robot.definir_led('left', 255, 0, 0)
 
     def play_sound(self):
-        self.marty_robot.jouer_son(1)
-
-    def get_distance(self):
-        distance = self.marty_robot.obtenir_distance()
-        self.status_label.setText(f'Distance: {distance} cm')
-
-    def get_accelerometer(self):
-        accelerometer = self.marty_robot.obtenir_accelerometre()
-        self.status_label.setText(f'Accéléromètre: {accelerometer}')
-
-    def stop(self):
-        self.marty_robot.arreter()
-
-    def high_five(self):
-        self.marty_robot.high_five()
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = MartyControlApp()
-    ex.show()
-    sys.exit(app.exec())
+        self.marty_robot.j
