@@ -1,0 +1,182 @@
+Pour accomplir toutes les étapes du projet avec Marty le robot, nous allons suivre les instructions fournies dans le document et utiliser les ressources de la documentation officielle de Marty. Voici un plan détaillé pour chaque étape du projet.
+
+Étape 1: Familiarisation avec l'environnement de développement
+Configuration de l'environnement
+Installer Python: Assurez-vous que Python 3 est installé sur votre machine.
+Installer les librairies nécessaires:
+bash
+Copier le code
+pip install marty-python pyqt6 opencv-python qreader
+Exemple de code pour tester l'installation
+python
+Copier le code
+import marty
+
+# Vérifiez l'installation en essayant d'importer la librairie Marty
+print("Marty library imported successfully!")
+Étape 2: Mise en œuvre du protocole de communication
+Connexion au robot Marty
+python
+Copier le code
+import marty
+
+# Remplacez 'marty_ip' par l'adresse IP de votre robot Marty
+m = marty.Marty('socket://marty_ip')
+
+# Vérification de la connexion
+if m.is_connected():
+    print("Connected to Marty!")
+else:
+    print("Failed to connect to Marty.")
+Étape 3: Application de contrôle du robot
+Interface de contrôle basique
+Nous utiliserons PyQt6 pour créer une interface graphique simple pour contrôler Marty.
+
+python
+Copier le code
+import sys
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton
+import marty
+
+class MartyControl(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        # Connexion à Marty
+        self.m = marty.Marty('socket://marty_ip')
+
+        self.initUI()
+
+    def initUI(self):
+        layout = QVBoxLayout()
+
+        self.connect_btn = QPushButton('Connect to Marty', self)
+        self.connect_btn.clicked.connect(self.connect_to_marty)
+        layout.addWidget(self.connect_btn)
+
+        self.move_left_btn = QPushButton('Move Left Hip', self)
+        self.move_left_btn.clicked.connect(lambda: self.move_joint('left_hip', 20))
+        layout.addWidget(self.move_left_btn)
+
+        self.move_right_btn = QPushButton('Move Right Hip', self)
+        self.move_right_btn.clicked.connect(lambda: self.move_joint('right_hip', -20))
+        layout.addWidget(self.move_right_btn)
+
+        self.setLayout(layout)
+        self.setWindowTitle('Marty Control')
+        self.show()
+
+    def connect_to_marty(self):
+        if self.m.is_connected():
+            self.connect_btn.setText('Connected to Marty')
+        else:
+            self.connect_btn.setText('Failed to connect')
+
+    def move_joint(self, joint, position):
+        self.m.move_joint(joint, position, duration=2)
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MartyControl()
+    sys.exit(app.exec())
+Commentaire: Cette interface permet de se connecter à Marty et de contrôler les mouvements de ses hanches.
+
+Étape 4: Communication séquentielle de deux robots
+Pour cette étape, nous devons connecter et synchroniser deux robots Marty pour qu'ils communiquent entre eux.
+
+python
+Copier le code
+import marty
+
+# Remplacez par les adresses IP de vos robots
+marty1 = marty.Marty('socket://marty_ip_1')
+marty2 = marty.Marty('socket://marty_ip_2')
+
+# Vérification de la connexion
+if marty1.is_connected() and marty2.is_connected():
+    print("Both Martys are connected!")
+
+# Exemple de communication séquentielle
+def move_both_martys():
+    marty1.walk(steps=2, step_length=50)
+    marty2.walk(steps=2, step_length=50)
+
+move_both_martys()
+Commentaire: Ce script connecte deux robots Marty et les fait marcher en séquence.
+
+Étape 5: Résolution de labyrinthe via le capteur couleur
+Pour cette étape, nous utiliserons le capteur couleur de Marty pour naviguer dans un labyrinthe.
+
+python
+Copier le code
+import marty
+
+# Connexion au robot Marty
+m = marty.Marty('socket://marty_ip')
+
+# Fonction pour suivre une couleur spécifique
+def follow_color(target_color):
+    while True:
+        color = m.get_color_sensor_reading()
+        if color == target_color:
+            m.walk(steps=1, step_length=50)
+        else:
+            m.turn(30)  # Tourner jusqu'à trouver la couleur
+
+# Exemple d'utilisation pour suivre la couleur rouge
+follow_color('red')
+Commentaire: Ce script permet à Marty de suivre une couleur spécifique, ici le rouge, pour naviguer dans un labyrinthe.
+
+Étape 6: Lecture de QR Code
+Nous utiliserons la librairie QReader pour lire des QR codes avec la caméra de Marty.
+
+python
+Copier le code
+import cv2
+from qreader import QReader
+
+# Connexion au robot Marty
+m = marty.Marty('socket://marty_ip')
+
+# Initialisation de la capture vidéo
+cap = cv2.VideoCapture(0)  # Assurez-vous que la caméra correcte est sélectionnée
+qr_reader = QReader()
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    codes = qr_reader.detect_and_decode(frame)
+    if codes:
+        for code in codes:
+            print(f"QR Code Detected: {code}")
+
+    cv2.imshow('Marty Camera', frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
+Commentaire: Ce script utilise la caméra de Marty pour détecter et lire des QR codes.
+
+Gestion de Projet
+Pour gérer efficacement ce projet en groupe, voici quelques conseils pratiques:
+
+Utilisez Git pour la gestion de version:
+
+Initialisez un dépôt Git et créez des branches pour différentes fonctionnalités.
+Effectuez des revues de code régulières et intégrez les changements via des pull requests.
+Planification:
+
+Utilisez un diagramme de Gantt pour planifier les tâches et suivre l'avancement.
+Répartissez les tâches entre les membres de l'équipe en fonction de leurs compétences.
+Communication:
+
+Organisez des réunions régulières pour discuter de l'avancement, des obstacles et des solutions.
+Utilisez des outils comme Slack ou Microsoft Teams pour la communication quotidienne.
+Documentation:
+
+Documentez chaque étape du projet, les décisions prises, et les modifications apportées au code.
+Maintenez un journal de bord pour suivre les problèmes rencontrés et les solutions trouvées.
+En suivant ces étapes et en utilisant les exemples de code fournis, vous serez en mesure de réaliser le projet avec succès. Si vous avez besoin de plus de détails ou d'aide supplémentaire, n'hésitez pas à demander.
