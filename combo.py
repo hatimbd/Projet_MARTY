@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout, QGroupBox
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon
@@ -19,6 +19,13 @@ class MartyRobot:
     def marcher(self, pas, tourner=0, temps_mouvement=1, longueur_pas=50):
         self.marty.walk(pas, tourner, temps_mouvement, longueur_pas)
     
+    def marcher_avant(self):
+         self.marty.walk(num_steps=2, step_length=25, move_time=1500, blocking=True)
+         
+    
+    def marcher_arriere(self):
+         self.marty.walk(num_steps=2, step_length=-25, move_time=1500, blocking=True)
+   
     def tourner_droite(self):
         self.marty.sidestep('right', steps=1, step_length=35, move_time=1000, blocking=True)
     
@@ -68,126 +75,139 @@ class MartyControlApp(QWidget):
 
     def initUI(self):
         self.setWindowTitle('Marty Control Interface')
-        self.setGeometry(100, 100, 400, 300)
+        self.setGeometry(100, 100, 400, 600)
 
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
 
+        # Connection Box
+        connection_box = QGroupBox("Connection")
+        connection_layout = QVBoxLayout()
         self.ip_label = QLabel('Adresse IP de Marty:', self)
-        self.layout.addWidget(self.ip_label)
+        connection_layout.addWidget(self.ip_label)
 
         self.ip_input = QLineEdit(self)
-        self.layout.addWidget(self.ip_input)
+        connection_layout.addWidget(self.ip_input)
 
         self.connect_btn = QPushButton('Connecter à Marty', self)
         self.connect_btn.clicked.connect(self.connect_to_marty)
-        self.layout.addWidget(self.connect_btn)
+        connection_layout.addWidget(self.connect_btn)
 
         self.status_label = QLabel('', self)
-        self.layout.addWidget(self.status_label)
-
-        self.move_btn = QPushButton('Bouger articulation (left_hip à 20 degrés)', self)
-        self.move_btn.clicked.connect(self.move_joint)
-        self.move_btn.setEnabled(False)
-        self.layout.addWidget(self.move_btn)
-
-        self.walk_btn = QPushButton('Marcher 5 pas', self)
-        self.walk_btn.clicked.connect(self.walk)
-        self.walk_btn.setEnabled(False)
-        self.layout.addWidget(self.walk_btn)
-
-        self.turn_btn = QPushButton('Tourner de 90 degrés', self)
-        self.turn_btn.clicked.connect(self.turn)
-        self.turn_btn.setEnabled(False)
-        self.layout.addWidget(self.turn_btn)
-
-        self.dance_btn = QPushButton('Danse en cercle', self)
-        self.dance_btn.clicked.connect(self.dance_circle)
-        self.dance_btn.setEnabled(False)
-        self.layout.addWidget(self.dance_btn)
-
-        self.stand_btn = QPushButton('Se tenir droit', self)
-        self.stand_btn.clicked.connect(self.stand_straight)
-        self.stand_btn.setEnabled(False)
-        self.layout.addWidget(self.stand_btn)
-
-        self.lean_btn = QPushButton('Incliner à gauche', self)
-        self.lean_btn.clicked.connect(self.lean_left)
-        self.lean_btn.setEnabled(False)
-        self.layout.addWidget(self.lean_btn)
-
-        self.eye_btn = QPushButton('Bouger œil gauche à 45 degrés', self)
-        self.eye_btn.clicked.connect(self.move_eye)
-        self.eye_btn.setEnabled(False)
-        self.layout.addWidget(self.eye_btn)
-
-        self.led_btn = QPushButton('Définir LED gauche à rouge', self)
-        self.led_btn.clicked.connect(self.set_led)
-        self.led_btn.setEnabled(False)
-        self.layout.addWidget(self.led_btn)
-
-        self.sound_btn = QPushButton('Jouer son ID 1', self)
-        self.sound_btn.clicked.connect(self.play_sound)
-        self.sound_btn.setEnabled(False)
-        self.layout.addWidget(self.sound_btn)
-
-        self.distance_btn = QPushButton('Obtenir distance', self)
-        self.distance_btn.clicked.connect(self.get_distance)
-        self.distance_btn.setEnabled(False)
-        self.layout.addWidget(self.distance_btn)
-
-        self.accelerometer_btn = QPushButton('Obtenir accéléromètre', self)
-        self.accelerometer_btn.clicked.connect(self.get_accelerometer)
-        self.accelerometer_btn.setEnabled(False)
-        self.layout.addWidget(self.accelerometer_btn)
-
-        self.stop_btn = QPushButton('Arrêter', self)
-        self.stop_btn.clicked.connect(self.stop)
-        self.stop_btn.setEnabled(False)
-        self.layout.addWidget(self.stop_btn)
-
-        self.high_five_btn = QPushButton('High Five', self)
-        self.high_five_btn.clicked.connect(self.high_five)
-        self.high_five_btn.setEnabled(False)
-        self.layout.addWidget(self.high_five_btn)
+        connection_layout.addWidget(self.status_label)
         
-        
-         # Create layouts for movement buttons
+        connection_box.setLayout(connection_layout)
+        self.layout.addWidget(connection_box)
+
+        # Movement Controls
+        movement_box = QGroupBox("Movement Controls")
         movement_layout = QVBoxLayout()
 
         self.forward_btn = QPushButton(self)
-        self.forward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/up_blue_arrow'))  # Remplacez par le chemin vers votre image
+        self.forward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/up_blue_arrow'))
         self.forward_btn.setIconSize(QSize(50, 50))
         self.forward_btn.clicked.connect(self.move_forward)
+        self.forward_btn.setEnabled(False)
         movement_layout.addWidget(self.forward_btn)
 
         horizontal_layout = QHBoxLayout()
-        
         self.turn_left_btn = QPushButton(self)
-        self.turn_left_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/left_blue_arrow'))  # Remplacez par le chemin vers votre image
+        self.turn_left_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/left_blue_arrow'))
         self.turn_left_btn.setIconSize(QSize(50, 50))
         self.turn_left_btn.clicked.connect(self.turn_left)
+        self.turn_left_btn.setEnabled(False)
         horizontal_layout.addWidget(self.turn_left_btn)
 
         self.turn_right_btn = QPushButton(self)
-        self.turn_right_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/right_blue_arrow'))  # Remplacez par le chemin vers votre image
+        self.turn_right_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/right_blue_arrow'))
         self.turn_right_btn.setIconSize(QSize(50, 50))
         self.turn_right_btn.clicked.connect(self.turn_right)
+        self.turn_right_btn.setEnabled(False)
         horizontal_layout.addWidget(self.turn_right_btn)
-        
 
         movement_layout.addLayout(horizontal_layout)
 
         self.backward_btn = QPushButton(self)
-        self.backward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/down_blue_arrow'))  # Remplacez par le chemin vers votre image
+        self.backward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/down_blue_arrow'))
         self.backward_btn.setIconSize(QSize(50, 50))
         self.backward_btn.clicked.connect(self.move_backward)
+        self.backward_btn.setEnabled(False)
         movement_layout.addWidget(self.backward_btn)
-        
-        # Add movement layout to the main layout
-        self.layout.addLayout(movement_layout)
 
+        movement_box.setLayout(movement_layout)
+        self.layout.addWidget(movement_box)
 
+        # Additional Controls
+        controls_box = QGroupBox("Additional Controls")
+        controls_layout = QVBoxLayout()
+
+        self.move_btn = QPushButton('Bouger articulation (left_hip à 20 degrés)', self)
+        self.move_btn.clicked.connect(self.move_joint)
+        self.move_btn.setEnabled(False)
+        controls_layout.addWidget(self.move_btn)
+
+        self.walk_btn = QPushButton('Marcher 5 pas', self)
+        self.walk_btn.clicked.connect(self.walk)
+        self.walk_btn.setEnabled(False)
+        controls_layout.addWidget(self.walk_btn)
+
+        self.turn_btn = QPushButton('Tourner de 90 degrés', self)
+        self.turn_btn.clicked.connect(self.turn)
+        self.turn_btn.setEnabled(False)
+        controls_layout.addWidget(self.turn_btn)
+
+        self.dance_btn = QPushButton('Danse en cercle', self)
+        self.dance_btn.clicked.connect(self.dance_circle)
+        self.dance_btn.setEnabled(False)
+        controls_layout.addWidget(self.dance_btn)
+
+        self.stand_btn = QPushButton('Se tenir droit', self)
+        self.stand_btn.clicked.connect(self.stand_straight)
+        self.stand_btn.setEnabled(False)
+        controls_layout.addWidget(self.stand_btn)
+
+        self.lean_btn = QPushButton('Incliner à gauche', self)
+        self.lean_btn.clicked.connect(self.lean_left)
+        self.lean_btn.setEnabled(False)
+        controls_layout.addWidget(self.lean_btn)
+
+        self.eye_btn = QPushButton('Bouger œil gauche à 45 degrés', self)
+        self.eye_btn.clicked.connect(self.move_eye)
+        self.eye_btn.setEnabled(False)
+        controls_layout.addWidget(self.eye_btn)
+
+        self.led_btn = QPushButton('Définir LED gauche à rouge', self)
+        self.led_btn.clicked.connect(self.set_led)
+        self.led_btn.setEnabled(False)
+        controls_layout.addWidget(self.led_btn)
+
+        self.sound_btn = QPushButton('Jouer son ID 1', self)
+        self.sound_btn.clicked.connect(self.play_sound)
+        self.sound_btn.setEnabled(False)
+        controls_layout.addWidget(self.sound_btn)
+
+        self.distance_btn = QPushButton('Obtenir distance', self)
+        self.distance_btn.clicked.connect(self.get_distance)
+        self.distance_btn.setEnabled(False)
+        controls_layout.addWidget(self.distance_btn)
+
+        self.accelerometer_btn = QPushButton('Obtenir accéléromètre', self)
+        self.accelerometer_btn.clicked.connect(self.get_accelerometer)
+        self.accelerometer_btn.setEnabled(False)
+        controls_layout.addWidget(self.accelerometer_btn)
+
+        self.stop_btn = QPushButton('Arrêter', self)
+        self.stop_btn.clicked.connect(self.stop)
+        self.stop_btn.setEnabled(False)
+        controls_layout.addWidget(self.stop_btn)
+
+        self.high_five_btn = QPushButton('High Five', self)
+        self.high_five_btn.clicked.connect(self.high_five)
+        self.high_five_btn.setEnabled(False)
+        controls_layout.addWidget(self.high_five_btn)
+
+        controls_box.setLayout(controls_layout)
+        self.layout.addWidget(controls_box)
 
     def connect_to_marty(self):
         ip = self.ip_input.text()
@@ -199,21 +219,7 @@ class MartyControlApp(QWidget):
             self.status_label.setText(f'Erreur: {e}')
             self.enable_buttons(False)
 
-    def move_forward(self):
-        self.marty_robot.marcher(1)
-
-    def move_backward(self):
-        self.marty_robot.marcher(-1)
-
-    def turn_left(self):
-        self.marty_robot.tourner(-90)
-
-    def turn_right(self):
-        self.marty_robot.tourner(90)
-
     def enable_buttons(self, enabled):
-        self.forward_btn.setEnabled(enabled)
-        self.backward_btn.setEnabled(enabled)
         self.move_btn.setEnabled(enabled)
         self.walk_btn.setEnabled(enabled)
         self.turn_btn.setEnabled(enabled)
@@ -227,8 +233,10 @@ class MartyControlApp(QWidget):
         self.accelerometer_btn.setEnabled(enabled)
         self.stop_btn.setEnabled(enabled)
         self.high_five_btn.setEnabled(enabled)
-        self.turn_right_btn.setEnabled(enabled)
+        self.forward_btn.setEnabled(enabled)
         self.turn_left_btn.setEnabled(enabled)
+        self.turn_right_btn.setEnabled(enabled)
+        self.backward_btn.setEnabled(enabled)
     def move_joint(self):
         if self.marty_robot:
             self.marty_robot.bouger_articulation('left_hip', 20)
@@ -290,6 +298,14 @@ class MartyControlApp(QWidget):
     def turn_left(self):
         if self.marty_robot:
             self.marty_robot.tourner_gauche()
+    
+    def move_forward(self):
+        if self.marty_robot:
+            self.marty_robot.marcher_avant()
+    
+    def move_backward(self):
+        if self.marty_robot:
+            self.marty_robot.marcher_arriere()
 
 
 if __name__ == '__main__':
