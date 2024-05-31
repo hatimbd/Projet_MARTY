@@ -75,10 +75,16 @@ class MartyControlApp(QWidget):
 
     def initUI(self):
         self.setWindowTitle('Marty Control Interface')
-        self.setGeometry(100, 100, 400, 600)
+        self.setGeometry(100, 100, 800, 600)
 
-        self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
+        main_layout = QHBoxLayout()
+        self.setLayout(main_layout)
+
+        left_layout = QVBoxLayout()
+        main_layout.addLayout(left_layout)
+
+        right_layout = QVBoxLayout()
+        main_layout.addLayout(right_layout)
 
         # Connection Box
         connection_box = QGroupBox("Connection")
@@ -97,7 +103,7 @@ class MartyControlApp(QWidget):
         connection_layout.addWidget(self.status_label)
         
         connection_box.setLayout(connection_layout)
-        self.layout.addWidget(connection_box)
+        left_layout.addWidget(connection_box)
 
         # Movement Controls
         movement_box = QGroupBox("Movement Controls")
@@ -135,7 +141,7 @@ class MartyControlApp(QWidget):
         movement_layout.addWidget(self.backward_btn)
 
         movement_box.setLayout(movement_layout)
-        self.layout.addWidget(movement_box)
+        left_layout.addWidget(movement_box)
 
         # Additional Controls
         controls_box = QGroupBox("Additional Controls")
@@ -207,7 +213,7 @@ class MartyControlApp(QWidget):
         controls_layout.addWidget(self.high_five_btn)
 
         controls_box.setLayout(controls_layout)
-        self.layout.addWidget(controls_box)
+        right_layout.addWidget(controls_box)
 
     def connect_to_marty(self):
         ip = self.ip_input.text()
@@ -218,6 +224,14 @@ class MartyControlApp(QWidget):
         except MartyConfigException as e:
             self.status_label.setText(f'Erreur: {e}')
             self.enable_buttons(False)
+
+
+
+
+
+
+
+
 
     def enable_buttons(self, enabled):
         self.move_btn.setEnabled(enabled)
