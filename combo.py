@@ -1,9 +1,10 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout, QGroupBox
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QGroupBox, QLineEdit
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon
 from martypy import Marty, MartyConfigException
+import threading
 
 class MartyRobot:
     def __init__(self, adresse_ip):
@@ -13,12 +14,10 @@ class MartyRobot:
         except MartyConfigException as e:
             print(f"Error connecting to Marty: {e}")
 
-    def bouger_articulation(self, articulation, position, temps_mouvement=1, bloquant=True):
-        self.marty.move_joint(articulation, position, temps_mouvement, bloquant)
+ 
+    def marcher(self, pas, start_foot, tourner, step_length, temps_mouvement):
+        self.marty.walk(pas, start_foot, tourner, step_length, temps_mouvement)
 
-    def marcher(self, pas, tourner=0, temps_mouvement=1, longueur_pas=50):
-        self.marty.walk(pas, tourner, temps_mouvement, longueur_pas)
-    
     def marcher_avant(self):
          self.marty.walk(num_steps=2, step_length=25, move_time=1500, blocking=True)
          
@@ -32,24 +31,12 @@ class MartyRobot:
     def tourner_gauche(self):
         self.marty.sidestep('left', steps=1, step_length=35, move_time=1000, blocking=True)
 
-
-    def tourner(self, angle):
-        self.marty.turn(angle)
-
-    def danse_cercle(self):
-        self.marty.circle_dance()
+    def danse(self):
+        self.marty.dance()
 
     def se_tenir_droit(self):
         self.marty.stand_straight()
 
-    def incliner(self, direction):
-        self.marty.lean(direction)
-
-    def bouger_oeil(self, oeil, position):
-        self.marty.move_eye(oeil, position)
-
-    def definir_led(self, led, r, g, b):
-        self.marty.set_led(led, r, g, b)
 
     def jouer_son(self, id_son):
         self.marty.play_sound(id_son)
@@ -65,6 +52,11 @@ class MartyRobot:
 
     def high_five(self):
         self.marty.high_five()
+        
+    def obtenir_niveau_batterie(self):
+        percentage = self.marty.get_battery_remaining()
+        return {"percentage": percentage}
+
 
 class MartyControlApp(QWidget):
     def __init__(self):
@@ -94,6 +86,7 @@ class MartyControlApp(QWidget):
 
         self.ip_input = QLineEdit(self)
         connection_layout.addWidget(self.ip_input)
+        
 
         self.connect_btn = QPushButton('Connecter à Marty', self)
         self.connect_btn.clicked.connect(self.connect_to_marty)
@@ -102,6 +95,14 @@ class MartyControlApp(QWidget):
         self.status_label = QLabel('', self)
         connection_layout.addWidget(self.status_label)
         
+        self.battery_btn = QPushButton('Obtenir niveau de batterie', self)
+        self.battery_btn.clicked.connect(self.get_battery)
+        self.battery_btn.setEnabled(False)
+        connection_layout.addWidget(self.battery_btn)
+        
+        self.battery_label = QLabel('Niveau de batterie: ', self)
+        connection_layout.addWidget(self.battery_label)
+
         connection_box.setLayout(connection_layout)
         left_layout.addWidget(connection_box)
 
@@ -211,7 +212,18 @@ class MartyControlApp(QWidget):
         self.high_five_btn.clicked.connect(self.high_five)
         self.high_five_btn.setEnabled(False)
         controls_layout.addWidget(self.high_five_btn)
+        
+        self.turn_right_btn1 = QPushButton('Roation à droite', self)
+        self.turn_right_btn1.clicked.connect(self.turn_right1)
+        self.turn_right_btn1.setEnabled(False)
+        controls_layout.addWidget(self.turn_right_btn1)
+        
+        self.turn_left_btn1 = QPushButton('Rotation à gauche', self)
+        self.turn_left_btn1.clicked.connect(self.turn_left1)
+        self.turn_left_btn1.setEnabled(False)
+        controls_layout.addWidget(self.turn_left_btn1)
 
+        
         controls_box.setLayout(controls_layout)
         right_layout.addWidget(controls_box)
 
@@ -251,6 +263,9 @@ class MartyControlApp(QWidget):
         self.turn_left_btn.setEnabled(enabled)
         self.turn_right_btn.setEnabled(enabled)
         self.backward_btn.setEnabled(enabled)
+        self.turn_right_btn1.setEnabled(enabled)
+        self.turn_left_btn1.setEnabled(enabled)
+        self.battery_btn.setEnabled(enabled)
     def move_joint(self):
         if self.marty_robot:
             self.marty_robot.bouger_articulation('left_hip', 20)
@@ -321,6 +336,20 @@ class MartyControlApp(QWidget):
         if self.marty_robot:
             self.marty_robot.marcher_arriere()
 
+    def turn_right1(self):
+        if self.marty_robot:
+            self.marty_robot.marcher(3, 'auto', -20, 25, 3000)
+            self.marty_robot.se_tenir_droit()
+        
+    def turn_left1(self):
+        if self.marty_robot:
+            self.marty_robot.marcher(3, 'auto', 20, 25, 3000)
+            self.marty_robot.se_tenir_droit()
+    
+    def get_battery(self):
+        if self.marty_robot:
+            battery = self.marty_robot.obtenir_niveau_batterie()
+            self.battery_label.setText(f'Niveau de batterie: {battery["percentage"]}%')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
