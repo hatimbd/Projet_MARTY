@@ -17,13 +17,18 @@ class MartyRobot:
  
     def marcher(self, pas, start_foot, tourner, step_length, temps_mouvement):
         self.marty.walk(pas, start_foot, tourner, step_length, temps_mouvement)
+        self.marty.stand_straight()
 
     def marcher_avant(self):
-         self.marty.walk(num_steps=2, step_length=25, move_time=1500, blocking=True)
+        self.marty.walk(num_steps=2, step_length=25, move_time=1500, blocking=True)
+        self.marty.stand_straight()
          
-    
     def marcher_arriere(self):
-         self.marty.walk(num_steps=2, step_length=-25, move_time=1500, blocking=True)
+        self.marty.walk(num_steps=2, step_length=-25, move_time=1500, blocking=True)
+        self.marty.stand_straight()
+        
+    def celebration(self):
+        self.marty.celebrate(3000)
    
     def tourner_droite(self):
         self.marty.sidestep('right', steps=1, step_length=35, move_time=1000, blocking=True)
@@ -153,10 +158,16 @@ class MartyControlApp(QWidget):
         self.walk_btn.setEnabled(False)
         controls_layout.addWidget(self.walk_btn)
 
-        self.dance_btn = QPushButton('Danse en cercle', self)
+        self.dance_btn = QPushButton('Danse', self)
         self.dance_btn.clicked.connect(self.dance)
         self.dance_btn.setEnabled(False)
         controls_layout.addWidget(self.dance_btn)
+        
+        self.celeb_btn = QPushButton('celebration', self)
+        self.celeb_btn.clicked.connect(self.dance)
+        self.celeb_btn.setEnabled(False)
+        controls_layout.addWidget(self.celeb_btn)
+
 
         self.stand_btn = QPushButton('Se tenir droit', self)
         self.stand_btn.clicked.connect(self.stand_straight)
@@ -223,6 +234,7 @@ class MartyControlApp(QWidget):
     def enable_buttons(self, enabled):
         self.walk_btn.setEnabled(enabled)
         self.dance_btn.setEnabled(enabled)
+        self.celeb_btn.setEnabled(enabled)
         self.stand_btn.setEnabled(enabled)
         self.sound_btn.setEnabled(enabled)
         self.distance_btn.setEnabled(enabled)
@@ -242,62 +254,79 @@ class MartyControlApp(QWidget):
     def walk(self):
         if self.marty_robot:
             mon_thread = threading.Thread(target = self.marty_robot.marcher, args=(5))
+            mon_thread.start()
 
     def dance(self):
         if self.marty_robot:
             mon_thread = threading.Thread(target = self.marty_robot.danse)
+            mon_thread.start()
+            
+    def celebrer(self):
+        if self.marty_robot:
+            mon_thread = threading.Thread(target = self.marty_robot.celebration)
+            mon_thread.start()
 
     def stand_straight(self):
         if self.marty_robot:
             mon_thread = threading.Thread(target = self.marty_robot.se_tenir_droit)
+            mon_thread.start()
 
     def play_sound(self):
         if self.marty_robot:
             mon_thread = threading.Thread(target = self.marty_robot.jouer_son, args=(1))
+            mon_thread.start()
 
     def get_distance(self):
         if self.marty_robot:
             distance = self.marty_robot.obtenir_distance()
             mon_thread = threading.Thread(target = self.status_label.setText(f'Distance: {distance} cm'))
+            mon_thread.start()
 
     def get_accelerometer(self):
         if self.marty_robot:
             accelerometer = self.marty_robot.obtenir_accelerometre()
             mon_thread = threading.Thread(target = self.status_label.setText(f'Accéléromètre: {accelerometer}'))
+            mon_thread.start()
 
     def stop(self):
         if self.marty_robot:
             mon_thread = threading.Thread(target = self.marty_robot.arreter)
+            mon_thread.start()
 
     def high_five(self):
         if self.marty_robot:
             mon_thread = threading.Thread(target = self.marty_robot.high_five)
+            mon_thread.start()
     
     def turn_right(self):
         if self.marty_robot:
             mon_thread = threading.Thread(target = self.marty_robot.tourner_droite)
+            mon_thread.start()
     
     def turn_left(self):
         if self.marty_robot:
             mon_thread = threading.Thread(target = self.marty_robot.tourner_gauche)
+            mon_thread.start()
     
     def move_forward(self):
         if self.marty_robot:
             mon_thread = threading.Thread(target = self.marty_robot.marcher_avant)
+            mon_thread.start()
     
     def move_backward(self):
         if self.marty_robot:
             mon_thread = threading.Thread(target = self.marty_robot.marcher_arriere)
+            mon_thread.start()
 
     def turn_right1(self):
         if self.marty_robot:
             mon_thread = threading.Thread(target = self.marty_robot.marcher, args=(3, 'auto', -20, 25, 3000))
-            self.marty_robot.se_tenir_droit()
+            mon_thread.start()
         
     def turn_left1(self):
         if self.marty_robot:
             mon_thread = threading.Thread(target = self.marty_robot.marcher, args=(3, 'auto', 20, 25, 3000))
-            self.marty_robot.se_tenir_droit()
+            mon_thread.start()
     
     def get_battery(self):
         if self.marty_robot:
