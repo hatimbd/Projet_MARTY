@@ -18,6 +18,13 @@ class MartyRobot:
 
     def marcher(self, pas, tourner=0, temps_mouvement=1, longueur_pas=50):
         self.marty.walk(pas, tourner, temps_mouvement, longueur_pas)
+    
+    def tourner_droite(self):
+        self.marty.sidestep('right', steps=1, step_length=35, move_time=1000, blocking=True)
+    
+    def tourner_gauche(self):
+        self.marty.sidestep('left', steps=1, step_length=35, move_time=1000, blocking=True)
+
 
     def tourner(self, angle):
         self.marty.turn(angle)
@@ -144,32 +151,35 @@ class MartyControlApp(QWidget):
         self.high_five_btn.setEnabled(False)
         self.layout.addWidget(self.high_five_btn)
         
+        
          # Create layouts for movement buttons
         movement_layout = QVBoxLayout()
 
         self.forward_btn = QPushButton(self)
-        self.forward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/up_arrow'))  # Remplacez par le chemin vers votre image
+        self.forward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/up_blue_arrow'))  # Remplacez par le chemin vers votre image
         self.forward_btn.setIconSize(QSize(50, 50))
         self.forward_btn.clicked.connect(self.move_forward)
         movement_layout.addWidget(self.forward_btn)
 
         horizontal_layout = QHBoxLayout()
-        self.left_btn = QPushButton(self)
-        self.left_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/left_arrow'))  # Remplacez par le chemin vers votre image
-        self.left_btn.setIconSize(QSize(50, 50))
-        self.left_btn.clicked.connect(self.turn_left)
-        horizontal_layout.addWidget(self.left_btn)
+        
+        self.turn_left_btn = QPushButton(self)
+        self.turn_left_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/left_blue_arrow'))  # Remplacez par le chemin vers votre image
+        self.turn_left_btn.setIconSize(QSize(50, 50))
+        self.turn_left_btn.clicked.connect(self.turn_left)
+        horizontal_layout.addWidget(self.turn_left_btn)
 
-        self.right_btn = QPushButton(self)
-        self.right_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/right_arrow'))  # Remplacez par le chemin vers votre image
-        self.right_btn.setIconSize(QSize(50, 50))
-        self.right_btn.clicked.connect(self.turn_right)
-        horizontal_layout.addWidget(self.right_btn)
+        self.turn_right_btn = QPushButton(self)
+        self.turn_right_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/right_blue_arrow'))  # Remplacez par le chemin vers votre image
+        self.turn_right_btn.setIconSize(QSize(50, 50))
+        self.turn_right_btn.clicked.connect(self.turn_right)
+        horizontal_layout.addWidget(self.turn_right_btn)
+        
 
         movement_layout.addLayout(horizontal_layout)
 
         self.backward_btn = QPushButton(self)
-        self.backward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/down_arrow'))  # Remplacez par le chemin vers votre image
+        self.backward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/down_blue_arrow'))  # Remplacez par le chemin vers votre image
         self.backward_btn.setIconSize(QSize(50, 50))
         self.backward_btn.clicked.connect(self.move_backward)
         movement_layout.addWidget(self.backward_btn)
@@ -203,8 +213,6 @@ class MartyControlApp(QWidget):
 
     def enable_buttons(self, enabled):
         self.forward_btn.setEnabled(enabled)
-        self.left_btn.setEnabled(enabled)
-        self.right_btn.setEnabled(enabled)
         self.backward_btn.setEnabled(enabled)
         self.move_btn.setEnabled(enabled)
         self.walk_btn.setEnabled(enabled)
@@ -219,7 +227,8 @@ class MartyControlApp(QWidget):
         self.accelerometer_btn.setEnabled(enabled)
         self.stop_btn.setEnabled(enabled)
         self.high_five_btn.setEnabled(enabled)
-
+        self.turn_right_btn.setEnabled(enabled)
+        self.turn_left_btn.setEnabled(enabled)
     def move_joint(self):
         if self.marty_robot:
             self.marty_robot.bouger_articulation('left_hip', 20)
@@ -230,7 +239,7 @@ class MartyControlApp(QWidget):
 
     def turn(self):
         if self.marty_robot:
-            self.marty_robot.tourner(90)
+            self.marty_robot.turn_right()
 
     def dance_circle(self):
         if self.marty_robot:
@@ -273,6 +282,15 @@ class MartyControlApp(QWidget):
     def high_five(self):
         if self.marty_robot:
             self.marty_robot.high_five()
+    
+    def turn_right(self):
+        if self.marty_robot:
+            self.marty_robot.tourner_droite()
+    
+    def turn_left(self):
+        if self.marty_robot:
+            self.marty_robot.tourner_gauche()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
