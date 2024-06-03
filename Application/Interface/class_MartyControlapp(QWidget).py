@@ -5,6 +5,7 @@ from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon
 from martypy import Marty, MartyConfigException
 import threading
+from class_MartyRobot import MartyRobot
 
 class MartyControlApp(QWidget):
     def __init__(self):
