@@ -1,3 +1,10 @@
+import sys
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QGroupBox, QLineEdit
+from PyQt6.QtCore import Qt
+from PyQt6.QtCore import QSize
+from PyQt6.QtGui import QIcon
+from martypy import Marty, MartyConfigException
+import threading
 def walk(self):
         if self.marty_robot:
             mon_thread = threading.Thread(target = self.marty_robot.marcher, args=(5))
