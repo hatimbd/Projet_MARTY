@@ -207,7 +207,7 @@ class MartyControlApp(QWidget):
         self.battery_btn.setEnabled(enabled)
         self.eyes_btn.setEnabled(enabled)
         
-     def walk(self):
+    def walk(self):
         if self.marty_robot:
             mon_thread = threading.Thread(target = self.marty_robot.marcher, args=(5))
             mon_thread.start()
