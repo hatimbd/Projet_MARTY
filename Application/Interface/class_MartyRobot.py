@@ -47,7 +47,7 @@ class MartyRobot:
         self.marty.play_sound(id_son)
 
     def obtenir_distance(self):
-        return self.marty.get_distance()
+        return self.marty.get_distance_sensor()
 
     def obtenir_accelerometre(self):
         return self.marty.get_accelerometer()
