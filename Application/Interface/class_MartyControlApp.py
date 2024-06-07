@@ -132,6 +132,7 @@ class MartyControlApp(QWidget):
         
         self.celeb_btn = QPushButton('celebration', self)
         self.celeb_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/celebrate'))
+        self.celeb_btn.setStyleSheet("QPushButton { text-align: center; }")
         self.celeb_btn.setIconSize(QSize(35, 35))
         self.celeb_btn.clicked.connect(self.dance)
         self.celeb_btn.setEnabled(False)
@@ -140,6 +141,7 @@ class MartyControlApp(QWidget):
 
         self.stand_btn = QPushButton('Se tenir droit', self)
         self.stand_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/stand'))
+        self.stand_btn.setStyleSheet("QPushButton { text-align: center; }")
         self.stand_btn.setIconSize(QSize(35, 35))
         self.stand_btn.clicked.connect(self.stand_straight)
         self.stand_btn.setEnabled(False)
@@ -147,6 +149,7 @@ class MartyControlApp(QWidget):
 
         self.sound_btn = QPushButton('Jouer son ID 1', self)
         self.sound_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/sound'))
+        self.sound_btn.setStyleSheet("QPushButton { text-align: center; }")
         self.sound_btn.setIconSize(QSize(35, 35))
         self.sound_btn.clicked.connect(self.play_sound)
         self.sound_btn.setEnabled(False)
@@ -156,6 +159,7 @@ class MartyControlApp(QWidget):
 
         self.stop_btn = QPushButton('Arrêter', self)
         self.stop_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/stop'))
+        self.stop_btn.setStyleSheet("QPushButton { text-align: center; }")
         self.stop_btn.setIconSize(QSize(35, 35))
         self.stop_btn.clicked.connect(self.stop)
         self.stop_btn.setEnabled(False)
@@ -269,13 +273,13 @@ class MartyControlApp(QWidget):
     def get_distance(self):
         if self.marty_robot:
             distance = self.marty_robot.obtenir_distance()
-            mon_thread = threading.Thread(target = self.status_label.setText(f'Distance: {distance} cm'))
+            mon_thread = threading.Thread(target = self.dist_label.setText(f'Distance: {distance} cm'))
             mon_thread.start()
 
     def get_accelerometer(self):
         if self.marty_robot:
             accelerometer = self.marty_robot.obtenir_accelerometre()
-            mon_thread = threading.Thread(target = self.status_label.setText(f'Accéléromètre: {accelerometer}'))
+            mon_thread = threading.Thread(target = self.acc_label.setText(f'Accéléromètre: {accelerometer}'))
             mon_thread.start()
 
     def stop(self):
