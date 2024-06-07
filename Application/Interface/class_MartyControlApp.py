@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QGroupBox, QLineEdit
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QGroupBox, QLineEdit, QGridLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon
@@ -58,24 +58,45 @@ class MartyControlApp(QWidget):
         # Movement Controls
         movement_box = QGroupBox("Movement Controls")
         movement_layout = QVBoxLayout()
+        
+        # Grid layout for top buttons
+        top_layout = QGridLayout()
 
+        self.turn_left_btn1 = QPushButton(self)
+        self.turn_left_btn1.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/L'))
+        self.turn_left_btn1.setIconSize(QSize(50, 50))
+        self.turn_left_btn1.clicked.connect(self.turn_left1)
+        self.turn_left_btn1.setEnabled(False)
+        top_layout.addWidget(self.turn_left_btn1, 0, 0)
+        
         self.forward_btn = QPushButton(self)
-        self.forward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/up_blue_arrow'))
+        self.forward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/up_blue_arrow'))
         self.forward_btn.setIconSize(QSize(50, 50))
         self.forward_btn.clicked.connect(self.move_forward)
         self.forward_btn.setEnabled(False)
-        movement_layout.addWidget(self.forward_btn)
+        top_layout.addWidget(self.forward_btn, 0, 1)
 
+        self.turn_right_btn1 = QPushButton(self)
+        self.turn_right_btn1.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/R'))
+        self.turn_right_btn1.setIconSize(QSize(50, 50))
+        self.turn_right_btn1.clicked.connect(self.turn_right1)
+        self.turn_right_btn1.setEnabled(False)
+        top_layout.addWidget(self.turn_right_btn1, 0, 2)
+        
+        movement_layout.addLayout(top_layout)
+
+        # Horizontal layout for left and right arrows
+        
         horizontal_layout = QHBoxLayout()
         self.turn_left_btn = QPushButton(self)
-        self.turn_left_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/left_blue_arrow'))
+        self.turn_left_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/left_blue_arrow'))
         self.turn_left_btn.setIconSize(QSize(50, 50))
         self.turn_left_btn.clicked.connect(self.turn_left)
         self.turn_left_btn.setEnabled(False)
         horizontal_layout.addWidget(self.turn_left_btn)
 
         self.turn_right_btn = QPushButton(self)
-        self.turn_right_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/right_blue_arrow'))
+        self.turn_right_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/right_blue_arrow'))
         self.turn_right_btn.setIconSize(QSize(50, 50))
         self.turn_right_btn.clicked.connect(self.turn_right)
         self.turn_right_btn.setEnabled(False)
@@ -84,11 +105,13 @@ class MartyControlApp(QWidget):
         movement_layout.addLayout(horizontal_layout)
 
         self.backward_btn = QPushButton(self)
-        self.backward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/down_blue_arrow'))
+        self.backward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/down_blue_arrow'))
         self.backward_btn.setIconSize(QSize(50, 50))
         self.backward_btn.clicked.connect(self.move_backward)
         self.backward_btn.setEnabled(False)
         movement_layout.addWidget(self.backward_btn)
+        
+      
 
         movement_box.setLayout(movement_layout)
         left_layout.addWidget(movement_box)
@@ -97,61 +120,60 @@ class MartyControlApp(QWidget):
         controls_box = QGroupBox("Additional Controls")
         controls_layout = QVBoxLayout()
 
-        self.walk_btn = QPushButton('Marcher 5 pas', self)
-        self.walk_btn.clicked.connect(self.walk)
-        self.walk_btn.setEnabled(False)
-        controls_layout.addWidget(self.walk_btn)
+        # Grid layout for buttons
+        buttons_layout = QGridLayout()
 
         self.dance_btn = QPushButton('Danse', self)
+        self.dance_btn.setIconSize(QSize(35, 35))
         self.dance_btn.clicked.connect(self.dance)
         self.dance_btn.setEnabled(False)
-        controls_layout.addWidget(self.dance_btn)
+        buttons_layout.addWidget(self.dance_btn, 0, 0)
         
         self.celeb_btn = QPushButton('celebration', self)
+        self.celeb_btn.setIconSize(QSize(35, 35))
         self.celeb_btn.clicked.connect(self.dance)
         self.celeb_btn.setEnabled(False)
-        controls_layout.addWidget(self.celeb_btn)
+        buttons_layout.addWidget(self.celeb_btn)
 
 
         self.stand_btn = QPushButton('Se tenir droit', self)
+        self.stand_btn.setIconSize(QSize(35, 35))
         self.stand_btn.clicked.connect(self.stand_straight)
         self.stand_btn.setEnabled(False)
-        controls_layout.addWidget(self.stand_btn)
+        buttons_layout.addWidget(self.stand_btn, 0, 1)
 
         self.sound_btn = QPushButton('Jouer son ID 1', self)
+        self.sound_btn.setIconSize(QSize(35, 35))
         self.sound_btn.clicked.connect(self.play_sound)
         self.sound_btn.setEnabled(False)
-        controls_layout.addWidget(self.sound_btn)
+        buttons_layout.addWidget(self.sound_btn, 0, 2)
 
         self.distance_btn = QPushButton('Obtenir distance', self)
+        self.distance_btn.setIconSize(QSize(35, 35))
         self.distance_btn.clicked.connect(self.get_distance)
         self.distance_btn.setEnabled(False)
-        controls_layout.addWidget(self.distance_btn)
+        buttons_layout.addWidget(self.distance_btn, 0, 3)
 
         self.accelerometer_btn = QPushButton('Obtenir accéléromètre', self)
+        self.accelerometer_btn.setIconSize(QSize(35, 35))
         self.accelerometer_btn.clicked.connect(self.get_accelerometer)
         self.accelerometer_btn.setEnabled(False)
-        controls_layout.addWidget(self.accelerometer_btn)
+        buttons_layout.addWidget(self.accelerometer_btn, 1, 0)
 
         self.stop_btn = QPushButton('Arrêter', self)
+        self.stop_btn.setIconSize(QSize(35, 35))
         self.stop_btn.clicked.connect(self.stop)
         self.stop_btn.setEnabled(False)
-        controls_layout.addWidget(self.stop_btn)
+        buttons_layout.addWidget(self.stop_btn, 1, 1)
 
         self.high_five_btn = QPushButton('High Five', self)
+        self.high_five_btn.setIconSize(QSize(35, 35))
         self.high_five_btn.clicked.connect(self.high_five)
         self.high_five_btn.setEnabled(False)
-        controls_layout.addWidget(self.high_five_btn)
+        buttons_layout.addWidget(self.high_five_btn, 1, 2)
         
-        self.turn_right_btn1 = QPushButton('Roation à droite', self)
-        self.turn_right_btn1.clicked.connect(self.turn_right1)
-        self.turn_right_btn1.setEnabled(False)
-        controls_layout.addWidget(self.turn_right_btn1)
-        
-        self.turn_left_btn1 = QPushButton('Rotation à gauche', self)
-        self.turn_left_btn1.clicked.connect(self.turn_left1)
-        self.turn_left_btn1.setEnabled(False)
-        controls_layout.addWidget(self.turn_left_btn1)
+        controls_layout.addLayout(buttons_layout)
+
         
         #champ de saisie pour entrer la position des yeux.
         #tu dois saisir soit :'angry', 'excited', 'normal', 'wide', or 'wiggle' sinon tu saisis un angle
@@ -189,7 +211,6 @@ class MartyControlApp(QWidget):
 
 
     def enable_buttons(self, enabled):
-        self.walk_btn.setEnabled(enabled)
         self.dance_btn.setEnabled(enabled)
         self.celeb_btn.setEnabled(enabled)
         self.stand_btn.setEnabled(enabled)
