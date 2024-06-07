@@ -73,6 +73,7 @@ class MartyControlApp(QWidget):
         self.forward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/up_blue_arrow'))
         self.forward_btn.setIconSize(QSize(50, 50))
         self.forward_btn.clicked.connect(self.move_forward)
+        self.forward_btn.setShortcut('up')
         self.forward_btn.setEnabled(False)
         top_layout.addWidget(self.forward_btn, 0, 1)
 
@@ -92,6 +93,7 @@ class MartyControlApp(QWidget):
         self.turn_left_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/left_blue_arrow'))
         self.turn_left_btn.setIconSize(QSize(50, 50))
         self.turn_left_btn.clicked.connect(self.turn_left)
+        self.turn_left_btn.setShortcut('left')
         self.turn_left_btn.setEnabled(False)
         horizontal_layout.addWidget(self.turn_left_btn)
 
@@ -99,6 +101,7 @@ class MartyControlApp(QWidget):
         self.turn_right_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/right_blue_arrow'))
         self.turn_right_btn.setIconSize(QSize(50, 50))
         self.turn_right_btn.clicked.connect(self.turn_right)
+        self.turn_right_btn.setShortcut('right')
         self.turn_right_btn.setEnabled(False)
         horizontal_layout.addWidget(self.turn_right_btn)
 
@@ -108,6 +111,7 @@ class MartyControlApp(QWidget):
         self.backward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/down_blue_arrow'))
         self.backward_btn.setIconSize(QSize(50, 50))
         self.backward_btn.clicked.connect(self.move_backward)
+        self.backward_btn.setShortcut('down')
         self.backward_btn.setEnabled(False)
         movement_layout.addWidget(self.backward_btn)
         
@@ -218,13 +222,6 @@ class MartyControlApp(QWidget):
         except MartyConfigException as e:
             self.status_label.setText(f'Erreur: {e}')
             self.enable_buttons(False)
-
-
-
-
-
-
-
 
 
     def enable_buttons(self, enabled):
@@ -338,4 +335,6 @@ class MartyControlApp(QWidget):
                 # If input is not a number, it will be treated as a pose string
                 pass
             self.marty_robot.bouger_oeil(pose_or_angle)
-    
+
+ 
+
