@@ -163,6 +163,36 @@ class MartyControlApp(QWidget):
 
         self.acc_label = QLabel('valeur de l\'accéléromètre: ', self)
         controls_layout.addWidget(self.acc_label)
+        
+        self.calibrate_red_button = QPushButton('Calibrate Red', self)
+        self.calibrate_red_button.clicked.connect(lambda: self.calibrate_color('rouge'))
+        self.calibrate_red_button.setEnabled(False)
+        controls_layout.addWidget(self.calibrate_red_button)
+        
+        self.calibrate_yellow_button = QPushButton('Calibrate Yellow', self)
+        self.calibrate_yellow_button.clicked.connect(lambda: self.calibrate_color('jaune'))
+        self.calibrate_yellow_button.setEnabled(False)
+        controls_layout.addWidget(self.calibrate_yellow_button)
+        
+        self.calibrate_blue_button = QPushButton('Calibrate Blue', self)
+        self.calibrate_blue_button.setEnabled(False)
+        self.calibrate_blue_button.clicked.connect(lambda: self.calibrate_color('bleu'))
+        controls_layout.addWidget(self.calibrate_blue_button)
+        
+        self.calibrate_violet_button = QPushButton('Calibrate Violet', self)
+        self.calibrate_violet_button.clicked.connect(lambda: self.calibrate_color('violet'))
+        self.calibrate_violet_button.setEnabled(False)
+        controls_layout.addWidget(self.calibrate_violet_button)
+        
+        self.calibrate_green_button = QPushButton('Calibrate Green', self)
+        self.calibrate_green_button.clicked.connect(lambda: self.calibrate_color('vert'))
+        self.calibrate_green_button.setEnabled(False)
+        controls_layout.addWidget(self.calibrate_green_button)
+        
+        self.detect_button = QPushButton('Start Detection', self)
+        self.detect_button.clicked.connect(self.start_color_detection)
+        self.detect_button.setEnabled(False)
+        controls_layout.addWidget(self.detect_button)
 
         self.stop_btn = QPushButton('Arrêter', self)
         self.stop_btn.setIconSize(QSize(35, 35))
@@ -221,6 +251,12 @@ class MartyControlApp(QWidget):
         self.sound_btn.setEnabled(enabled)
         self.distance_btn.setEnabled(enabled)
         self.accelerometer_btn.setEnabled(enabled)
+        self.calibrate_red_button.setEnabled(enabled)
+        self.calibrate_yellow_button.setEnabled(enabled)
+        self.calibrate_green_button.setEnabled(enabled)
+        self.calibrate_blue_button.setEnabled(enabled)
+        self.calibrate_violet_button.setEnabled(enabled)
+        self.detect_button.setEnabled(enabled)
         self.stop_btn.setEnabled(enabled)
         self.high_five_btn.setEnabled(enabled)
         self.forward_btn.setEnabled(enabled)
@@ -325,4 +361,16 @@ class MartyControlApp(QWidget):
                 # If input is not a number, it will be treated as a pose string
                 pass
             self.marty_robot.bouger_oeil(pose_or_angle)
+    
+    def calibrate_color(self, color):
+        if self.marty_robot:
+            mon_thread =  threading.Thread(target=self.marty_robot.calibrate_color, args=(color,))
+            mon_thread.start()
+
+
+    def start_color_detection(self):
+        if self.marty_robot:
+            mon_thread = threading.Thread(target=self.marty_robot.start_detection)
+            mon_thread.start()
+            
     
