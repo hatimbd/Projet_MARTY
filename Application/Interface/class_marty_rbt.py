@@ -62,48 +62,49 @@ class MartyRobot:
     def bouger_oeil(self, pose_or_angle, move_time=1000, bloquant=None):
         self.marty.eyes(pose_or_angle, move_time, bloquant)
         
-    def calibrate_color(self, color_name):
-        print(f"Placez la couleur {color_name} sous le capteur et appuyez sur Entrée.")
-        input()  # Attendre que l'utilisateur appuie sur Entrée
-        readings = []
-        for _ in range(10):
-            reading = self.marty.get_ground_sensor_reading('left')
-            readings.append(reading)
-            time.sleep(0.1)
-        avg_reading = sum(readings) / len(readings)
-        self.color_readings[color_name] = avg_reading
-        print(f"Lecture moyenne pour {color_name}: {avg_reading}")
         
-    def detect_color(self, reading):
-        closest_color = None
-        min_diff = float('inf')
-        for color, value in self.color_readings.items():
-            diff = abs(reading - value)
-            if diff < min_diff:
-                min_diff = diff
-                closest_color = color
-        return closest_color
-    
-    def start_detection(self):
-        print("Début de la détection des couleurs...")
-        self.detection_running = True
-        try:
-            while self.detection_running:
-                reading = self.marty.get_ground_sensor_reading("left")
-                detected_color = self.detect_color(reading)
-                print(f"Couleur détectée : {detected_color}")
-
-                if detected_color == "rouge":
-                    self.danse()
-                elif detected_color == "jaune":
-                    self.marcher_arriere()
-                elif detected_color == "bleu":
-                    self.tourner_gauche()
-                elif detected_color == "violet":
-                    self.tourner_droite()
-                elif detected_color == "vert":
-                    self.marcher_avant()
-                
-                time.sleep(1)  # Attendre une seconde avant la prochaine lecture
-        except KeyboardInterrupt:
-            print("Détection des couleurs terminée.")
+    def get_color_name(self):
+        color_sensor_reading = self.marty.get_ground_sensor_reading('LeftColorSensor')
+        print(color_sensor_reading)
+        if 14 <= color_sensor_reading <= 16 :
+            print("Noir")
+            return "Noir"
+        elif 19 <= color_sensor_reading <= 22 : 
+            print("Bleu")
+            return "Bleu"
+        elif 84 <= color_sensor_reading <= 89 :
+            print("violet")
+            return "violet"
+        elif 27 <= color_sensor_reading <= 30:
+            print("Vert")
+            return "Vert"
+        elif 167 <= color_sensor_reading <= 171 :
+            print("Jaune")
+            return "Jaune"
+        elif 73 <= color_sensor_reading <= 76 :
+            print("Rouge")
+            return "Rouge"
+        else:
+            print("Couleur inconnue")
+            return "Couleur inconnue"
+        
+    def act_on_color(self, color):
+        while True:
+            if color == "Rouge":
+                self.marty.dance()
+                self.marty.stand_straight()
+            elif color == "Jaune":
+                self.marty.walk(num_steps=2, step_length=-25, move_time=1500, blocking=True)
+                self.marty.stand_straight()
+            elif color == "Vert":
+                self.marty.walk(num_steps=2, step_length=25, move_time=1500, blocking=True)
+                self.marty.stand_straight()
+            elif color == "Bleu":
+                self.marty.sidestep('left', steps=1, step_length=35, move_time=1000, blocking=True)
+                self.marty.stand_straight()
+            elif color == "violet":
+                self.marty.sidestep('right', steps=1, step_length=35, move_time=1000, blocking=True)
+                self.marty.stand_straight()
+            elif color == "noir":
+                self.marty.stop()
+        
