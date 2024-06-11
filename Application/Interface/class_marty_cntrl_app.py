@@ -71,6 +71,7 @@ class MartyControlApp(QWidget):
         self.forward_btn.setIcon(QIcon(r'up_blue_arrow'))
         self.forward_btn.setIconSize(QSize(50, 50))
         self.forward_btn.clicked.connect(self.move_forward)
+        self.forward_btn.setShortcut('up')
         self.forward_btn.setEnabled(False)
         top_layout.addWidget(self.forward_btn, 0, 1)
 
@@ -90,6 +91,7 @@ class MartyControlApp(QWidget):
         self.turn_left_btn.setIcon(QIcon(r'left_blue_arrow'))
         self.turn_left_btn.setIconSize(QSize(50, 50))
         self.turn_left_btn.clicked.connect(self.turn_left)
+        self.turn_left_btn.setShortcut('left')
         self.turn_left_btn.setEnabled(False)
         horizontal_layout.addWidget(self.turn_left_btn)
 
@@ -97,6 +99,7 @@ class MartyControlApp(QWidget):
         self.turn_right_btn.setIcon(QIcon(r'right_blue_arrow'))
         self.turn_right_btn.setIconSize(QSize(50, 50))
         self.turn_right_btn.clicked.connect(self.turn_right)
+        self.turn_right_btn.setShortcut('right')
         self.turn_right_btn.setEnabled(False)
         horizontal_layout.addWidget(self.turn_right_btn)
 
@@ -106,6 +109,7 @@ class MartyControlApp(QWidget):
         self.backward_btn.setIcon(QIcon(r'down_blue_arrow'))
         self.backward_btn.setIconSize(QSize(50, 50))
         self.backward_btn.clicked.connect(self.move_backward)
+        self.backward_btn.setShortcut('down')
         self.backward_btn.setEnabled(False)
         movement_layout.addWidget(self.backward_btn)
         
@@ -151,9 +155,10 @@ class MartyControlApp(QWidget):
         self.distance_btn.clicked.connect(self.get_distance)
         self.distance_btn.setEnabled(False)
         buttons_layout.addWidget(self.distance_btn, 0, 3)
-
-        self.dist_label = QLabel('valeur du capteur de distance : ', self)
-        controls_layout.addWidget(self.dist_label)
+        
+        self.controls_label = QLabel('', self)
+        controls_layout.addWidget(self.controls_label)
+        
 
         self.accelerometer_btn = QPushButton('Obtenir accéléromètre', self)
         self.accelerometer_btn.setIconSize(QSize(35, 35))
@@ -161,38 +166,11 @@ class MartyControlApp(QWidget):
         self.accelerometer_btn.setEnabled(False)
         buttons_layout.addWidget(self.accelerometer_btn, 1, 0)
 
-        self.acc_label = QLabel('valeur de l\'accéléromètre: ', self)
-        controls_layout.addWidget(self.acc_label)
         
-        self.calibrate_red_button = QPushButton('Calibrate Red', self)
-        self.calibrate_red_button.clicked.connect(lambda: self.calibrate_color('rouge'))
-        self.calibrate_red_button.setEnabled(False)
-        controls_layout.addWidget(self.calibrate_red_button)
-        
-        self.calibrate_yellow_button = QPushButton('Calibrate Yellow', self)
-        self.calibrate_yellow_button.clicked.connect(lambda: self.calibrate_color('jaune'))
-        self.calibrate_yellow_button.setEnabled(False)
-        controls_layout.addWidget(self.calibrate_yellow_button)
-        
-        self.calibrate_blue_button = QPushButton('Calibrate Blue', self)
-        self.calibrate_blue_button.setEnabled(False)
-        self.calibrate_blue_button.clicked.connect(lambda: self.calibrate_color('bleu'))
-        controls_layout.addWidget(self.calibrate_blue_button)
-        
-        self.calibrate_violet_button = QPushButton('Calibrate Violet', self)
-        self.calibrate_violet_button.clicked.connect(lambda: self.calibrate_color('violet'))
-        self.calibrate_violet_button.setEnabled(False)
-        controls_layout.addWidget(self.calibrate_violet_button)
-        
-        self.calibrate_green_button = QPushButton('Calibrate Green', self)
-        self.calibrate_green_button.clicked.connect(lambda: self.calibrate_color('vert'))
-        self.calibrate_green_button.setEnabled(False)
-        controls_layout.addWidget(self.calibrate_green_button)
-        
-        self.detect_button = QPushButton('Start Detection', self)
-        self.detect_button.clicked.connect(self.start_color_detection)
-        self.detect_button.setEnabled(False)
-        controls_layout.addWidget(self.detect_button)
+        self.detect_colors_btn = QPushButton('Mode Couleur', self)
+        self.detect_colors_btn.clicked.connect(self.start_color_detection)
+        self.detect_colors_btn.setEnabled(False)  
+        controls_layout.addWidget(self.detect_colors_btn)
 
         self.stop_btn = QPushButton('Arrêter', self)
         self.stop_btn.setIconSize(QSize(35, 35))
@@ -251,12 +229,7 @@ class MartyControlApp(QWidget):
         self.sound_btn.setEnabled(enabled)
         self.distance_btn.setEnabled(enabled)
         self.accelerometer_btn.setEnabled(enabled)
-        self.calibrate_red_button.setEnabled(enabled)
-        self.calibrate_yellow_button.setEnabled(enabled)
-        self.calibrate_green_button.setEnabled(enabled)
-        self.calibrate_blue_button.setEnabled(enabled)
-        self.calibrate_violet_button.setEnabled(enabled)
-        self.detect_button.setEnabled(enabled)
+        self.detect_colors_btn.setEnabled(enabled)
         self.stop_btn.setEnabled(enabled)
         self.high_five_btn.setEnabled(enabled)
         self.forward_btn.setEnabled(enabled)
@@ -296,13 +269,13 @@ class MartyControlApp(QWidget):
     def get_distance(self):
         if self.marty_robot:
             distance = self.marty_robot.obtenir_distance()
-            mon_thread = threading.Thread(target = self.status_label.setText(f'Distance: {distance} cm'))
+            mon_thread = threading.Thread(target = self.controls_label.setText(f'Distance: {distance} cm'))
             mon_thread.start()
 
     def get_accelerometer(self):
         if self.marty_robot:
             accelerometer = self.marty_robot.obtenir_accelerometre()
-            mon_thread = threading.Thread(target = self.status_label.setText(f'Accéléromètre: {accelerometer}'))
+            mon_thread = threading.Thread(target = self.controls_label.setText(f'Accéléromètre: {accelerometer}'))
             mon_thread.start()
 
     def stop(self):
@@ -362,15 +335,8 @@ class MartyControlApp(QWidget):
                 pass
             self.marty_robot.bouger_oeil(pose_or_angle)
     
-    def calibrate_color(self, color):
-        if self.marty_robot:
-            mon_thread =  threading.Thread(target=self.marty_robot.calibrate_color, args=(color,))
-            mon_thread.start()
-
-
     def start_color_detection(self):
         if self.marty_robot:
-            mon_thread = threading.Thread(target=self.marty_robot.start_detection)
-            mon_thread.start()
-            
-    
+            color_name = self.marty_robot.get_color_name()
+            mon_thread = threading.Thread(target=self.marty_robot.act_on_color, args=(color_name))
+            mon_thread.start()       
