@@ -41,13 +41,13 @@ Bienvenue dans le projet Marty ! Ce projet a pour objectif de développer une ap
 
 ```plaintext
 marty_project/
-├── src/
-│   ├── main.py
-│   ├── ui/
-│   │   ├── main_window.py
-│   │   ├── control_panel.py
+├── Application/
+│   ├── Interface/
+│       ├── main.py
+│   │   ├── Class_MartyControlApp.py
+│   │   ├── Class_MartyRobot.py
 │   │   └── ...
-│   ├── robots/
+│   ├── /
 │   │   ├── marty.py
 │   │   └── ...
 │   ├── utils/
@@ -63,5 +63,4 @@ marty_project/
 │   ├── requirements.md
 │   ├── design.md
 │   └── ...
-├── README.md
-└── setup.py
+└──README.md
