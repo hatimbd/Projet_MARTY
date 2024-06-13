@@ -1,10 +1,8 @@
 ## Classe chargé de la création de l'interface graphique
-import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QGroupBox, QLineEdit, QGridLayout
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QGroupBox, QLineEdit, QGridLayout
 from PyQt6.QtCore import QSize
 from PyQt6.QtGui import QIcon
-from martypy import Marty, MartyConfigException
+from martypy import MartyConfigException
 import threading
 from class_MartyRobot import MartyRobot
 
@@ -64,14 +62,14 @@ class MartyControlApp(QWidget):
         top_layout = QGridLayout()
 
         self.turn_left_btn1 = QPushButton(self)
-        self.turn_left_btn1.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/L'))
+        self.turn_left_btn1.setIcon(QIcon(r'images/L'))
         self.turn_left_btn1.setIconSize(QSize(50, 50))
         self.turn_left_btn1.clicked.connect(self.turn_left1)
         self.turn_left_btn1.setEnabled(False)
         top_layout.addWidget(self.turn_left_btn1, 0, 0)
         
         self.forward_btn = QPushButton(self)
-        self.forward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/up_blue_arrow'))
+        self.forward_btn.setIcon(QIcon(r'images/up_blue_arrow'))
         self.forward_btn.setIconSize(QSize(50, 50))
         self.forward_btn.clicked.connect(self.move_forward)
         self.forward_btn.setShortcut('up')
@@ -79,7 +77,7 @@ class MartyControlApp(QWidget):
         top_layout.addWidget(self.forward_btn, 0, 1)
 
         self.turn_right_btn1 = QPushButton(self)
-        self.turn_right_btn1.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/R'))
+        self.turn_right_btn1.setIcon(QIcon(r'images/R'))
         self.turn_right_btn1.setIconSize(QSize(50, 50))
         self.turn_right_btn1.clicked.connect(self.turn_right1)
         self.turn_right_btn1.setEnabled(False)
@@ -91,7 +89,7 @@ class MartyControlApp(QWidget):
         
         horizontal_layout = QHBoxLayout()
         self.turn_left_btn = QPushButton(self)
-        self.turn_left_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/left_blue_arrow'))
+        self.turn_left_btn.setIcon(QIcon(r'images/left_blue_arrow'))
         self.turn_left_btn.setIconSize(QSize(50, 50))
         self.turn_left_btn.clicked.connect(self.turn_left)
         self.turn_left_btn.setShortcut('left')
@@ -99,7 +97,7 @@ class MartyControlApp(QWidget):
         horizontal_layout.addWidget(self.turn_left_btn)
 
         self.turn_right_btn = QPushButton(self)
-        self.turn_right_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/right_blue_arrow'))
+        self.turn_right_btn.setIcon(QIcon(r'images/right_blue_arrow'))
         self.turn_right_btn.setIconSize(QSize(50, 50))
         self.turn_right_btn.clicked.connect(self.turn_right)
         self.turn_right_btn.setShortcut('right')
@@ -109,7 +107,7 @@ class MartyControlApp(QWidget):
         movement_layout.addLayout(horizontal_layout)
 
         self.backward_btn = QPushButton(self)
-        self.backward_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/down_blue_arrow'))
+        self.backward_btn.setIcon(QIcon(r'images/down_blue_arrow'))
         self.backward_btn.setIconSize(QSize(50, 50))
         self.backward_btn.clicked.connect(self.move_backward)
         self.backward_btn.setShortcut('down')
@@ -129,14 +127,14 @@ class MartyControlApp(QWidget):
         buttons_layout = QGridLayout()
 
         self.dance_btn = QPushButton('Danse', self)
-        self.dance_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/dance'))
+        self.dance_btn.setIcon(QIcon(r'images/dance'))
         self.dance_btn.setIconSize(QSize(35, 35))
         self.dance_btn.clicked.connect(self.dance)
         self.dance_btn.setEnabled(False)
         buttons_layout.addWidget(self.dance_btn, 0, 0)
         
         self.celeb_btn = QPushButton('celebration', self)
-        self.celeb_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/celebrate'))
+        self.celeb_btn.setIcon(QIcon(r'images/celebrate'))
         self.celeb_btn.setStyleSheet("QPushButton { text-align: center; }")
         self.celeb_btn.setIconSize(QSize(35, 35))
         self.celeb_btn.clicked.connect(self.dance)
@@ -145,7 +143,7 @@ class MartyControlApp(QWidget):
 
 
         self.stand_btn = QPushButton('Se tenir droit', self)
-        self.stand_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/stand'))
+        self.stand_btn.setIcon(QIcon(r'images/stand'))
         self.stand_btn.setStyleSheet("QPushButton { text-align: center; }")
         self.stand_btn.setIconSize(QSize(35, 35))
         self.stand_btn.clicked.connect(self.stand_straight)
@@ -153,7 +151,7 @@ class MartyControlApp(QWidget):
         buttons_layout.addWidget(self.stand_btn, 1, 0)
 
         self.sound_btn = QPushButton('Jouer son ID 1', self)
-        self.sound_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/sound'))
+        self.sound_btn.setIcon(QIcon(r'images/sound'))
         self.sound_btn.setStyleSheet("QPushButton { text-align: center; }")
         self.sound_btn.setIconSize(QSize(35, 35))
         self.sound_btn.clicked.connect(self.play_sound)
@@ -163,7 +161,7 @@ class MartyControlApp(QWidget):
 
 
         self.stop_btn = QPushButton('Arrêter', self)
-        self.stop_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/stop'))
+        self.stop_btn.setIcon(QIcon(r'images/stop'))
         self.stop_btn.setStyleSheet("QPushButton { text-align: center; }")
         self.stop_btn.setIconSize(QSize(35, 35))
         self.stop_btn.clicked.connect(self.stop)
@@ -171,7 +169,7 @@ class MartyControlApp(QWidget):
         buttons_layout.addWidget(self.stop_btn, 2, 0)
 
         self.high_five_btn = QPushButton('High Five', self)
-        self.high_five_btn.setIcon(QIcon(r'C:/Users/hatim/OneDrive/Bureau/Projet robotique/images/high_five'))
+        self.high_five_btn.setIcon(QIcon(r'images/high_five'))
         self.high_five_btn.setIconSize(QSize(35, 35))
         self.high_five_btn.clicked.connect(self.high_five)
         self.high_five_btn.setEnabled(False)
@@ -199,7 +197,7 @@ class MartyControlApp(QWidget):
         
         #champ de saisie pour entrer la position des yeux.
         #tu dois saisir soit :'angry', 'excited', 'normal', 'wide', or 'wiggle' sinon tu saisis un angle
-        self.eyes_label = QLabel('Position des yeux: ', self)
+        self.eyes_label = QLabel('Position des yeux: (Saisissez angry, excited, normal, wide ou wiggle \n sinon saisissez un angle) ', self)
         controls_layout.addWidget(self.eyes_label)
 
         self.eyes_input = QLineEdit(self)
@@ -209,6 +207,12 @@ class MartyControlApp(QWidget):
         self.eyes_btn.clicked.connect(self.move_eyes)
         self.eyes_btn.setEnabled(False)
         controls_layout.addWidget(self.eyes_btn)
+        
+        #mode couleurs boutton
+        self.detect_colors_btn = QPushButton('Mode Couleur', self)
+        self.detect_colors_btn.clicked.connect(self.start_color_detection)
+        self.detect_colors_btn.setEnabled(False)  
+        controls_layout.addWidget(self.detect_colors_btn)
 
         
         controls_box.setLayout(controls_layout)
@@ -242,6 +246,7 @@ class MartyControlApp(QWidget):
         self.turn_left_btn1.setEnabled(enabled)
         self.battery_btn.setEnabled(enabled)
         self.eyes_btn.setEnabled(enabled)
+        self.detect_colors_btn.setEnabled(enabled)
         
     def walk(self):
         if self.marty_robot:
@@ -336,6 +341,11 @@ class MartyControlApp(QWidget):
                 # If input is not a number, it will be treated as a pose string
                 pass
             self.marty_robot.bouger_oeil(pose_or_angle)
+
+    def start_color_detection(self):
+        if self.marty_robot:
+            self.detection_thread = threading.Thread(target = self.marty_robot.act_on_color)
+            self.detection_thread.start()
 
  
 
