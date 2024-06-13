@@ -4,6 +4,7 @@ from PyQt6.QtGui import QIcon
 from martypy import MartyConfigException
 import threading
 from class_marty_rbt import MartyRobot
+import time
 
 class MartyControlApp(QWidget):
     def __init__(self):
@@ -11,6 +12,7 @@ class MartyControlApp(QWidget):
 
         self.initUI()
         self.marty_robot = None
+        self.detection_running = False
 
     def initUI(self):
         self.setWindowTitle('Marty Control Interface')
@@ -337,6 +339,5 @@ class MartyControlApp(QWidget):
     
     def start_color_detection(self):
         if self.marty_robot:
-            color_name = self.marty_robot.get_color_name()
-            mon_thread = threading.Thread(target=self.marty_robot.act_on_color, args=(color_name))
-            mon_thread.start()       
+            self.detection_thread = threading.Thread(target = self.marty_robot.act_on_color)
+            self.detection_thread.start()
