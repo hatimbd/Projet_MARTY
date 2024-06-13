@@ -64,47 +64,57 @@ class MartyRobot:
         
         
     def get_color_name(self):
-        color_sensor_reading = self.marty.get_ground_sensor_reading('LeftColorSensor')
+        s=0
+        for i in range(10) :
+            color_sensor_reading = self.marty.get_ground_sensor_reading('LeftColorSensor')
+            s+=color_sensor_reading
+            i+=1
+        s=s/10
         print(color_sensor_reading)
-        if 14 <= color_sensor_reading <= 16 :
+        if 14 <= s <= 17 :
             print("Noir")
             return "Noir"
-        elif 19 <= color_sensor_reading <= 22 : 
-            print("Bleu")
-            return "Bleu"
-        elif 84 <= color_sensor_reading <= 89 :
-            print("violet")
-            return "violet"
-        elif 27 <= color_sensor_reading <= 30:
+        elif 19 <= s <= 23 : 
+            print("BleuM")
+            return "BleuM"
+        elif 89 <= s <= 99 :
+            print("Rose")
+            return "Rose"
+        elif 27 <= s <= 33:
             print("Vert")
             return "Vert"
-        elif 167 <= color_sensor_reading <= 171 :
+        elif 167 <= s <= 193 :
             print("Jaune")
             return "Jaune"
-        elif 73 <= color_sensor_reading <= 76 :
+        elif 73 <= s <= 87 :
             print("Rouge")
             return "Rouge"
+        elif 49 <= s <= 52 :
+            print("BleuC")
+            return("BleuC")
         else:
             print("Couleur inconnue")
             return "Couleur inconnue"
-        
-    def act_on_color(self, color):
-        while True:
+    global scan 
+    scan = True    
+    def act_on_color(self):
+        while scan:
+            color = self.get_color_name()
+            if color == "BleuC":
+                self.marty.eyes('wiggle')
+                self.marty.walk(num_steps=6, step_length=30, move_time=2000, blocking=True)
             if color == "Rouge":
                 self.marty.dance()
-                self.marty.stand_straight()
+                self.marty.stop()
             elif color == "Jaune":
-                self.marty.walk(num_steps=2, step_length=-25, move_time=1500, blocking=True)
-                self.marty.stand_straight()
+                self.marty.walk(num_steps=4, step_length=-30, move_time=2000, blocking=True)
             elif color == "Vert":
-                self.marty.walk(num_steps=2, step_length=25, move_time=1500, blocking=True)
+                self.marty.walk(num_steps=6, step_length=30, move_time=2000, blocking=True)
+            elif color == "BleuM":
+                self.marty.sidestep('right', steps=6, step_length=35, move_time=2000, blocking=True)
                 self.marty.stand_straight()
-            elif color == "Bleu":
-                self.marty.sidestep('left', steps=1, step_length=35, move_time=1000, blocking=True)
-                self.marty.stand_straight()
-            elif color == "violet":
-                self.marty.sidestep('right', steps=1, step_length=35, move_time=1000, blocking=True)
+            elif color == "Rose":
+                self.marty.sidestep('left', steps=6, step_length=35, move_time=2000, blocking=True)
                 self.marty.stand_straight()
             elif color == "noir":
                 self.marty.stop()
-        
