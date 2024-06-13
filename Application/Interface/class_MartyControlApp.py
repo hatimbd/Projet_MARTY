@@ -1,4 +1,4 @@
-// Classe chargé de la création de l'interface graphique
+## Classe chargé de la création de l'interface graphique
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QGroupBox, QLineEdit, QGridLayout
 from PyQt6.QtCore import Qt
