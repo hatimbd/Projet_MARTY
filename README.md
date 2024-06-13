@@ -42,24 +42,25 @@ Bienvenue dans le projet Marty ! Ce projet a pour objectif de développer une ap
 ```plaintext
 marty_project/
 ├── Application/
-│   ├── Images/
-│   │   ├── celebrate.png
-│   │   ├── dance.png
-│   │   ├── down_blue_arrow.png
-│   │   ├── high_five.png
-│   │   ├── L.png
-│   │   ├── left_blue_arrow.png
-│   │   ├── R.png
-│   │   ├── right_blue_arrow.png
-│   │   ├── rotation_left_arrow.png
-│   │   ├── rotation_right_arrow.png
-│   │   ├── sound.png
-│   │   ├── stand.png
-│   │   ├── stop.png
-│   │   ├── up_blue_arrow.png
+│   ├── Interface/
+│   |   |   ├── Images/
+│   │   |   |   ├── celebrate.png
+│   │   |   |   ├── dance.png
+│   │   |   |   ├──down_blue_arrow.png
+│   │   |   |   ├──high_five.png
+│   │   |   |   ├──L.png
+│   │   |   |   ├──left_blue_arrow.png
+│   │   |   |   ├── R.png
+│   │   |   |   ├──right_blue_arrow.png
+│   │   |   |   ├── rotation_left_arrow.png
+│   │   |   |   ├──rotation_right_arrow.png
+│   │   |   |   ├── sound.png
+│   │   |   |   ├──stand.png
+│   │   |   |   ├── stop.png
+│   │   |   |   ├──up_blue_arrow.png
+│   │   |   └── ...
 │   │   └── ...
 │   └── ...
-│   ├── Interface/
 │       ├── main.py
 │   │   ├── Class_MartyControlApp.py
 │   │   ├── Class_MartyRobot.py
