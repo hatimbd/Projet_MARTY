@@ -6,9 +6,12 @@ class MartyRobot:
         try:
             self.marty = Marty("wifi", adresse_ip)
             print(f"Connected to Marty at {adresse_ip}")
+            self.color_readings = {}
+            self.detection_thread = None
+            self.detection_running = False
+            self.matrix_data = []
         except MartyConfigException as e:
             print(f"Error connecting to Marty: {e}")
-
  
     def marcher(self, pas, start_foot, tourner, step_length, temps_mouvement):
         self.marty.walk(pas, start_foot, tourner, step_length, temps_mouvement)
@@ -115,3 +118,47 @@ class MartyRobot:
                 self.marty.stand_straight()
             elif color == "noir":
                 self.marty.stop()
+    def act_on_color1(self, color):
+        if color == "BleuC":
+            self.marty.eyes('wiggle')
+            self.marty.walk(num_steps=6, step_length=30, move_time=2000, blocking=True)
+        elif color == "Rouge":
+            self.marty.dance()
+            self.marty.stop()
+        elif color == "Jaune":
+            self.marty.walk(num_steps=4, step_length=-30, move_time=2000, blocking=True)
+        elif color == "Vert":
+            self.marty.walk(num_steps=6, step_length=30, move_time=2000, blocking=True)
+        elif color == "BleuM":
+            self.marty.sidestep('right', steps=6, step_length=35, move_time=2000, blocking=True)
+            self.marty.stand_straight()
+        elif color == "Rose":
+            self.marty.sidestep('left', steps=6, step_length=35, move_time=2000, blocking=True)
+            self.marty.stand_straight()
+    
+    def detectMazeColors(self):
+        directions1 = []
+        for _ in range(2):
+            detected_color = self.get_color_name()
+            print("Couleur détectée", detected_color)
+            directions1.append(detected_color)
+            self.marty.walk(num_steps=4, step_length=-30, move_time=2000, blocking=True)
+        self.marty.sidestep('right', steps=6, step_length=35, move_time=2000, blocking=True)
+        detected_color = self.get_color_name()
+        directions1.append(detected_color)
+        print("Couleur détectée", detected_color)
+        directions1.append(detected_color)
+        for _ in range(2):
+            self.marty.walk(num_steps=4, step_length=-30, move_time=2000, blocking=True)
+            detected_color = self.get_color_name()
+            print("Couleur détectée", detected_color)
+            directions1.append(detected_color)
+        self.marty.sidestep('right', steps=6, step_length=35, move_time=2000, blocking=True)
+        detected_color = self.get_color_name()
+        directions1.append(detected_color)
+        print("Couleur détectée", detected_color)
+        for _ in range(2):
+            detected_color = self.get_color_name()
+            print("Couleur détectée", detected_color)
+            directions1.append(detected_color)
+            self.marty.walk(num_steps=4, step_length=-30, move_time=2000, blocking=True)
