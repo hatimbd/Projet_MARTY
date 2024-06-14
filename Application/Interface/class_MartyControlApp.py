@@ -11,8 +11,10 @@ class MartyControlApp(QWidget):
         super().__init__()
 
         self.initUI()
-        self.marty_robot = None
-
+        self.marty_robot1 = None
+        self.marty_robot2 = None
+        self.detection_running = False
+        
     def initUI(self):
         self.setWindowTitle('Marty Control Interface')
         self.setGeometry(100, 100, 800, 600)
@@ -29,14 +31,22 @@ class MartyControlApp(QWidget):
         # Connection Box
         connection_box = QGroupBox("Connection")
         connection_layout = QVBoxLayout()
-        self.ip_label = QLabel('Adresse IP de Marty:', self)
-        connection_layout.addWidget(self.ip_label)
-
-        self.ip_input = QLineEdit(self)
-        connection_layout.addWidget(self.ip_input)
         
+        # Marty 1
+        self.ip_label1 = QLabel('Adresse IP de Marty 1:', self)
+        connection_layout.addWidget(self.ip_label1)
 
-        self.connect_btn = QPushButton('Connecter à Marty', self)
+        self.ip_input1 = QLineEdit(self)
+        connection_layout.addWidget(self.ip_input1)
+        
+         # Marty 2
+        self.ip_label2 = QLabel('Adresse IP de Marty 2:', self)
+        connection_layout.addWidget(self.ip_label2)
+
+        self.ip_input2 = QLineEdit(self)
+        connection_layout.addWidget(self.ip_input2)
+        
+        self.connect_btn = QPushButton('Connecter', self)
         self.connect_btn.clicked.connect(self.connect_to_marty)
         connection_layout.addWidget(self.connect_btn)
 
@@ -214,19 +224,35 @@ class MartyControlApp(QWidget):
         self.detect_colors_btn.setEnabled(False)  
         controls_layout.addWidget(self.detect_colors_btn)
 
+        self.maze_color_detect_btn = QPushButton('Détecter les couleurs des labyrinthes', self)
+        self.maze_color_detect_btn.clicked.connect(self.MazeColorDetect)
+        self.maze_color_detect_btn.setEnabled(False)
+        controls_layout.addWidget(self.maze_color_detect_btn)
         
         controls_box.setLayout(controls_layout)
         right_layout.addWidget(controls_box)
 
     def connect_to_marty(self):
-        ip = self.ip_input.text()
-        try:
-            self.marty_robot = MartyRobot(ip)
-            self.status_label.setText(f'Connecté à Marty à {ip}')
-            self.enable_buttons(True)
-        except MartyConfigException as e:
-            self.status_label.setText(f'Erreur: {e}')
-            self.enable_buttons(False)
+        ip1 = self.ip_input1.text()
+        ip2 = self.ip_input2.text()
+        if ip1:
+            try:
+                self.marty_robot1 = MartyRobot(ip1)
+                self.status_label.setText(f'Connecté à Marty 1 à {ip1}')
+            except MartyConfigException as e:
+                self.status_label.setText(f'Erreur de connexion à Marty 1: {e}')
+
+        if ip2:
+            try:
+                self.marty_robot2 = MartyRobot(ip2)
+                if self.marty_robot1:
+                    self.status_label.setText(self.status_label.text() + f'\nConnecté à Marty 2 à {ip2}')
+                else:
+                    self.status_label.setText(f'Connecté à Marty 2 à {ip2}')
+            except MartyConfigException as e:
+                self.status_label.setText(self.status_label.text() + f'\nErreur de connexion à Marty 2: {e}')
+
+        self.enable_buttons(self.marty_robot1 is not None or self.marty_robot2 is not None)
 
 
     def enable_buttons(self, enabled):
@@ -247,92 +273,129 @@ class MartyControlApp(QWidget):
         self.battery_btn.setEnabled(enabled)
         self.eyes_btn.setEnabled(enabled)
         self.detect_colors_btn.setEnabled(enabled)
+        self.maze_color_detect_btn.setEnabled(enabled)
         
     def walk(self):
-        if self.marty_robot:
-            mon_thread = threading.Thread(target = self.marty_robot.marcher, args=(5))
-            mon_thread.start()
+        if self.marty_robot1:
+            mon_thread1 = threading.Thread(target = self.marty_robot1.marcher, args=(5))
+            mon_thread1.start()
+        if self.marty_robot2:
+            mon_thread2 = threading.Thread(target = self.marty_robot2.marcher, args=(5))
+            mon_thread2.start()
 
     def dance(self):
-        if self.marty_robot:
-            mon_thread = threading.Thread(target = self.marty_robot.danse)
-            mon_thread.start()
+        if self.marty_robot1:
+            mon_thread1 = threading.Thread(target = self.marty_robot1.danse)
+            mon_thread1.start()
+        if self.marty_robot2:
+            mon_thread2 = threading.Thread(target = self.marty_robot2.danse)
+            mon_thread2.start()
             
     def celebrer(self):
-        if self.marty_robot:
-            mon_thread = threading.Thread(target = self.marty_robot.celebration)
-            mon_thread.start()
+        if self.marty_robot1:
+            mon_thread1 = threading.Thread(target = self.marty_robot1.celebration)
+            mon_thread1.start()
+        if self.marty_robot2:
+            mon_thread2 = threading.Thread(target = self.marty_robot2.celebration)
+            mon_thread2.start()
 
     def stand_straight(self):
-        if self.marty_robot:
-            mon_thread = threading.Thread(target = self.marty_robot.se_tenir_droit)
-            mon_thread.start()
+        if self.marty_robot1:
+            mon_thread1 = threading.Thread(target = self.marty_robot1.se_tenir_droit)
+            mon_thread1.start()
+        if self.marty_robot2:
+            mon_thread2 = threading.Thread(target = self.marty_robot2.se_tenir_droit)
+            mon_thread2.start()
 
     def play_sound(self):
-        if self.marty_robot:
-            mon_thread = threading.Thread(target = self.marty_robot.jouer_son, args=(1))
-            mon_thread.start()
+        if self.marty_robot1:
+            mon_thread1 = threading.Thread(target = self.marty_robot1.jouer_son, args=(1))
+            mon_thread1.start()
+        if self.marty_robot2:
+            mon_thread2 = threading.Thread(target = self.marty_robot2.jouer_son, args=(1))
+            mon_thread2.start()
 
     def get_distance(self):
-        if self.marty_robot:
-            distance = self.marty_robot.obtenir_distance()
-            mon_thread = threading.Thread(target = self.dist_label.setText(f'Distance: {distance} cm'))
+        if self.marty_robot1:
+            distance = self.marty_robot1.obtenir_distance()
+            mon_thread = threading.Thread(target = self.controls_label.setText(f'Distance: {distance} cm'))
             mon_thread.start()
 
     def get_accelerometer(self):
-        if self.marty_robot:
-            accelerometer = self.marty_robot.obtenir_accelerometre()
-            mon_thread = threading.Thread(target = self.acc_label.setText(f'Accéléromètre: {accelerometer}'))
+        if self.marty_robot1:
+            accelerometer = self.marty_robot1.obtenir_accelerometre()
+            mon_thread = threading.Thread(target = self.controls_label.setText(f'Accéléromètre: {accelerometer}'))
             mon_thread.start()
 
     def stop(self):
-        if self.marty_robot:
-            mon_thread = threading.Thread(target = self.marty_robot.arreter)
-            mon_thread.start()
+        if self.marty_robot1:
+            mon_thread1 = threading.Thread(target = self.marty_robot1.arreter)
+            mon_thread1.start()
 
     def high_five(self):
-        if self.marty_robot:
-            mon_thread = threading.Thread(target = self.marty_robot.high_five)
-            mon_thread.start()
+        if self.marty_robot1:
+            mon_thread1 = threading.Thread(target = self.marty_robot1.high_five)
+            mon_thread1.start()
+        if self.marty_robot1:
+            mon_thread2 = threading.Thread(target = self.marty_robot2.high_five)
+            mon_thread2.start()
     
     def turn_right(self):
-        if self.marty_robot:
-            mon_thread = threading.Thread(target = self.marty_robot.tourner_droite)
-            mon_thread.start()
+        if self.marty_robot1:
+            mon_thread1 = threading.Thread(target = self.marty_robot1.tourner_droite)
+            mon_thread1.start()
+        if self.marty_robot2:
+            mon_thread2 = threading.Thread(target = self.marty_robot2.tourner_droite)
+            mon_thread2.start()
     
     def turn_left(self):
-        if self.marty_robot:
-            mon_thread = threading.Thread(target = self.marty_robot.tourner_gauche)
+        if self.marty_robot1:
+            mon_thread = threading.Thread(target = self.marty_robot1.tourner_gauche)
+            mon_thread.start()
+        if self.marty_robot2:
+            mon_thread = threading.Thread(target = self.marty_robot2.tourner_gauche)
             mon_thread.start()
     
     def move_forward(self):
-        if self.marty_robot:
-            mon_thread = threading.Thread(target = self.marty_robot.marcher_avant)
-            mon_thread.start()
+        if self.marty_robot1:
+            mon_thread1 = threading.Thread(target=self.marty_robot1.marcher_avant)
+            mon_thread1.start()
+        if self.marty_robot2:
+            mon_thread2 = threading.Thread(target=self.marty_robot2.marcher_avant)
+            mon_thread2.start()
     
     def move_backward(self):
-        if self.marty_robot:
-            mon_thread = threading.Thread(target = self.marty_robot.marcher_arriere)
-            mon_thread.start()
+        if self.marty_robot1:
+            mon_thread1 = threading.Thread(target = self.marty_robot1.marcher_arriere)
+            mon_thread1.start()
+        if self.marty_robot2:
+            mon_thread2 = threading.Thread(target = self.marty_robot2.marcher_arriere)
+            mon_thread2.start()
 
     def turn_right1(self):
-        if self.marty_robot:
-            mon_thread = threading.Thread(target = self.marty_robot.marcher, args=(3, 'auto', -20, 25, 3000))
-            mon_thread.start()
+        if self.marty_robot1:
+            mon_thread1 = threading.Thread(target = self.marty_robot1.marcher, args=(3, 'auto', -20, 25, 3000))
+            mon_thread1.start()
+        if self.marty_robot2:
+            mon_thread2 = threading.Thread(target = self.marty_robot2.marcher, args=(3, 'auto', -20, 25, 3000))
+            mon_thread2.start()
         
     def turn_left1(self):
-        if self.marty_robot:
-            mon_thread = threading.Thread(target = self.marty_robot.marcher, args=(3, 'auto', 20, 25, 3000))
-            mon_thread.start()
-    
+        if self.marty_robot1:
+            mon_thread1 = threading.Thread(target = self.marty_robot1.marcher, args=(3, 'auto', 20, 25, 3000))
+            mon_thread1.start()
+        if self.marty_robot1:
+            mon_thread2 = threading.Thread(target = self.marty_robot2.marcher, args=(3, 'auto', 20, 25, 3000))
+            mon_thread2.start()
+            
     def get_battery(self):
-        if self.marty_robot:
-            battery = self.marty_robot.obtenir_niveau_batterie()
+        if self.marty_robot1:
+            battery = self.marty_robot1.obtenir_niveau_batterie()
             mon_thread = threading.Thread(target = self.battery_label.setText(f'Niveau de batterie: {battery["percentage"]}%'))
             mon_thread.start()
     
     def move_eyes(self):
-        if self.marty_robot:
+        if self.marty_robot1:
             pose_or_angle = self.eyes_input.text()
             try:
                 # Check if the input is a number and convert to int
@@ -340,12 +403,44 @@ class MartyControlApp(QWidget):
             except ValueError:
                 # If input is not a number, it will be treated as a pose string
                 pass
-            self.marty_robot.bouger_oeil(pose_or_angle)
-
+            self.marty_robot1.bouger_oeil(pose_or_angle)
+        if self.marty_robot2:
+            pose_or_angle = self.eyes_input.text()
+            try:
+                # Check if the input is a number and convert to int
+                pose_or_angle = int(pose_or_angle)
+            except ValueError:
+                # If input is not a number, it will be treated as a pose string
+                pass
+            self.marty_robot2.bouger_oeil(pose_or_angle)
+    
     def start_color_detection(self):
-        if self.marty_robot:
-            self.detection_thread = threading.Thread(target = self.marty_robot.act_on_color)
-            self.detection_thread.start()
+        if self.marty_robot1:
+            mon_thread1 = threading.Thread(target = self.marty_robot1.act_on_color)
+            mon_thread1.start()
+    
+    def MazeColorDetect(self):
+        if self.marty_robot1:
+            mon_thread1 = threading.Thread(target = self.marty_robot1.detectMazeColors)
+            mon_thread1.start()
+            matrice1 = self.marty_robot1.detectMazeColors()
+        if self.marty_robot2:
+            mon_thread2 = threading.Thread(target = self.marty_robot2.detectMazeColors)
+            mon_thread2.start()
+            matrice2 = self.marty_robot2.detectMazeColors()
+        self.merge_and_act_on_colors(matrice1, matrice2)
+    
+    def merge_and_act_on_colors(self, matrice1, matrice2):
+        merged_colors = []
+        for color1, color2 in zip(matrice1, matrice2):
+            if color1 != "noir":
+                merged_colors.append(color1)
+            elif color2 != "noir":
+                merged_colors.append(color2)
 
+        for color in merged_colors:
+            if self.marty_robot2:
+                self.marty_robot2.act_on_color1(color)
+                
  
 
