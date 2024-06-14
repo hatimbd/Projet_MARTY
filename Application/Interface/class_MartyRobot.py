@@ -142,7 +142,7 @@ class MartyRobot:
             detected_color = self.get_color_name()
             print("Couleur détectée", detected_color)
             directions1.append(detected_color)
-            self.marty.walk(num_steps=4, step_length=-30, move_time=2000, blocking=True)
+            self.marty.walk(num_steps=4, step_length=30, move_time=2000, blocking=True)
         self.marty.sidestep('right', steps=6, step_length=35, move_time=2000, blocking=True)
         detected_color = self.get_color_name()
         directions1.append(detected_color)
