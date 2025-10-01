@@ -74,3 +74,12 @@ marty_project/
 │   ├── marty.py
 │   └── ...
 └── README.md
+```
+---
+
+## 🖼️ Aperçu de l’interface de contrôle
+
+Voici une capture d’écran de l’interface graphique utilisée pour piloter les robots Marty :
+
+![Interface de contrôle](./Application/Interface/Images/Capture d’écran 2025-10-01 163825.png
+.png)
