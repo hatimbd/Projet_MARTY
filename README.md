@@ -1,73 +1,74 @@
-# Projet Marty
+# 🤖 Projet Marty
 
-Bienvenue dans le projet Marty ! Ce projet a pour objectif de développer une application en Python avec PyQt6 pour piloter et gérer des robots Marty. Ce fichier README fournit une vue d'ensemble des fonctionnalités, de la structure du projet, et des instructions pour démarrer.
+Bienvenue dans le projet **Marty** ! Ce projet vise à développer une application en **Python** avec **PyQt6** pour piloter et gérer des robots Marty. Ce fichier README présente les objectifs, les fonctionnalités, la structure du projet et les instructions pour bien démarrer.
 
-## Contexte
+---
 
-- **Outil de gestion de projet** : Utiliser un outil de gestion de projet associé à Git.
-- **Gestion de version de code** : Utiliser Git pour la gestion de versions.
-- **Technologies** : Python et PyQt6.
-- **Accès pour les enseignants** : Fournir l’accès à la gestion de projet et au dépôt Git avant le 13 avril 2024 aux enseignants :
-  - Quentin.Chassel@u-bourgogne.fr
-  - Hermine.Chatoux@u-bourgogne.fr
-  - Duncan.Luguern@u-bourgogne.fr
+## 📌 Contexte
+
+- **Gestion de projet** : Utilisation d’un outil de gestion de projet couplé à Git.
+- **Versioning** : Suivi des versions du code avec Git.
+- **Technologies utilisées** : Python & PyQt6.
+- **Accès enseignants :** :
+  - Quentin.Chassel@u-bourgogne.fr  
+  - Hermine.Chatoux@u-bourgogne.fr  
+  - Duncan.Luguern@u-bourgogne.fr  
   - Meldrick.Reimmer@u-bourgogne.fr
-- **Premiers livrables** : Un premier commit et le premier jet de la gestion de projet doivent être réalisés.
+  - 
+---
 
-## Fonctionnalités
+## 🧠 Fonctionnalités
 
-### 1ère Partie
+### 🔹 Partie 1 : Contrôle de base
 
-- **Connexion/Déconnexion des robots** : Gérer la connexion et la déconnexion des robots Marty via le protocole de communication.
+- **Connexion/Déconnexion** des robots Marty via le protocole de communication.
 - **Interface graphique** :
-  - **Pilotage du robot** : Avancer, reculer, tourner.
-  - **Emotions** : Gérer le regard de Marty, danser, célébrer.
-  - **Données capteurs** : Récupérer les données des capteurs (distance, obstacle, niveau de batterie, flux vidéo, capteur couleur).
-  - **Pilotage par interface** : Piloter les déplacements du robot via des boutons sur l’interface et par les touches du clavier.
-- **Groupes de 4 personnes** : 
-  - **Pilotage par manette** : Utiliser une manette de jeux ou d'autres périphériques pour le pilotage et les animations (vibration/lumière) de la manette.
-  - **Liste d'instructions** : Ajouter un onglet pour créer une liste d'instructions que Marty exécutera successivement.
+  - Pilotage : avancer, reculer, tourner
+  - Émotions : regard, danse, célébration
+  - Capteurs : distance, obstacle, batterie, flux vidéo, capteur couleur
+  - Contrôle : boutons de l’interface + touches clavier
+- **Pilotage avancé** :
+  - Manette de jeu ou périphériques externes (vibration, lumière)
+  - Création d’une **liste d’instructions** à exécuter séquentiellement
 
-### 2ème Partie
+### 🔹 Partie 2 : Scénario collaboratif
 
-- **Gestion de deux robots** : Piloter deux robots en séquentiel, Marty1 commence toujours le premier.
-- **Labyrinthe** : Utiliser des repères de couleur pour aller au centre du labyrinthe.
-  - **Déplacement tour par tour** : Chaque robot avance l’un après l’autre.
-  - **Lecture de QR code** : Lire les QR codes au sol via la caméra pour reconstituer une phrase mystère lors de la rencontre des robots au centre du labyrinthe.
-  - **Célébration** : Les robots célèbrent leur rencontre.
-  - **Chorégraphie synchronisée** : Synchroniser les robots pour une chorégraphie lors de leur rencontre.
+- **Gestion de deux robots** : Marty1 démarre toujours en premier
+- **Labyrinthe** :
+  - Déplacement tour par tour
+  - Lecture de QR codes au sol pour reconstituer une phrase mystère
+  - Rencontre au centre avec célébration
+  - **Chorégraphie synchronisée** des deux robots
 
-## Structure du Projet
+---
+
+## 🗂️ Structure du projet
 
 ```plaintext
 marty_project/
 ├── Application/
 │   ├── Interface/
-│   |   |   ├── Images/
-│   │   |   |   ├── celebrate.png
-│   │   |   |   ├── dance.png
-│   │   |   |   ├──down_blue_arrow.png
-│   │   |   |   ├──high_five.png
-│   │   |   |   ├──L.png
-│   │   |   |   ├──left_blue_arrow.png
-│   │   |   |   ├── R.png
-│   │   |   |   ├──right_blue_arrow.png
-│   │   |   |   ├── rotation_left_arrow.png
-│   │   |   |   ├──rotation_right_arrow.png
-│   │   |   |   ├── sound.png
-│   │   |   |   ├──stand.png
-│   │   |   |   ├── stop.png
-│   │   |   |   ├──up_blue_arrow.png
-│   │   |   └── ...
+│   │   ├── Images/
+│   │   │   ├── celebrate.png
+│   │   │   ├── dance.png
+│   │   │   ├── down_blue_arrow.png
+│   │   │   ├── high_five.png
+│   │   │   ├── L.png
+│   │   │   ├── left_blue_arrow.png
+│   │   │   ├── R.png
+│   │   │   ├── right_blue_arrow.png
+│   │   │   ├── rotation_left_arrow.png
+│   │   │   ├── rotation_right_arrow.png
+│   │   │   ├── sound.png
+│   │   │   ├── stand.png
+│   │   │   ├── stop.png
+│   │   │   ├── up_blue_arrow.png
 │   │   └── ...
+│   ├── main.py
+│   ├── Class_MartyControlApp.py
+│   ├── Class_MartyRobot.py
 │   └── ...
-│       ├── main.py
-│   │   ├── Class_MartyControlApp.py
-│   │   ├── Class_MartyRobot.py
-│   │   └── ...
+├── communication/
+│   ├── marty.py
 │   └── ...
-│   ├── communication/
-│   │   ├── marty.py
-│   │   └── ...
-│   └── ...
-└──README.md
+└── README.md
