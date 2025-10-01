@@ -1,6 +1,6 @@
 # 🤖 Projet Marty
 
-Bienvenue dans le projet **Marty** ! Ce projet vise à développer une application en **Python** avec **PyQt6** pour piloter et gérer des robots Marty. Ce fichier README présente les objectifs, les fonctionnalités, la structure du projet et les instructions pour bien démarrer.
+Bienvenue dans le projet **Marty** ! Ce projet vise à développer une application en ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) avec **PyQt6** pour piloter et gérer des robots Marty. Ce fichier README présente les objectifs, les fonctionnalités, la structure du projet et les instructions pour bien démarrer.
 
 ---
 
