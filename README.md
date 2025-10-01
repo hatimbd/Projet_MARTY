@@ -81,5 +81,5 @@ marty_project/
 
 Voici une capture d’écran de l’interface graphique utilisée pour piloter les robots Marty :
 
-![Interface de contrôle](./Application/Interface/Images/Capture d’écran 2025-10-01 163825.png
-.png)
+![Interface de contrôle](./Application/Interface/Images/Capture%20d’écran%202025-10-01%20163825.png)
+
